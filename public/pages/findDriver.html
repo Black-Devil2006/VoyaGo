@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Finding Driver</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div class="finding-driver">
+
+<h1>🚖 Finding Your Driver...</h1>
+
+<div class="loader"></div>
+
+<p>Please wait while we search nearby drivers.</p>
+
+<div id="status"></div>
+
+</div>
+
+<script>
+
+setTimeout(()=>{
+
+document.getElementById("status").innerHTML=
+"<h2>✅ Driver Found!</h2><br><a href='driverDetails.html'><button>View Driver</button></a>";
+
+},5000);
+
+</script>
+
+</body>
+</html>

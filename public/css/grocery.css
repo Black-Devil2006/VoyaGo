@@ -1,0 +1,19 @@
+.card-custom{
+
+text-align:center;
+
+transition:.3s;
+
+}
+
+.card-custom:hover{
+
+transform:translateY(-8px);
+
+}
+
+.card-custom h1{
+
+font-size:60px;
+
+}

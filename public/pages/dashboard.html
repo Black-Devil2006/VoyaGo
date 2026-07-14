@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>VoyaGo Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<link rel="stylesheet" href="../css/dashboard.css">
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            🚖 <span>VoyaGo</span>
+
+        </div>
+
+        <ul>
+
+            <li class="active">
+                <a href="#">
+                    <i class="fa-solid fa-house"></i>
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="ridebooking.html">
+                    <i class="fa-solid fa-taxi"></i>
+                    Book Ride
+                </a>
+            </li>
+
+            <li>
+                <a href="rentals.html">
+                    <i class="fa-solid fa-car"></i>
+                    Rentals
+                </a>
+            </li>
+
+            <li>
+                <a href="grocery.html">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    Grocery
+                </a>
+            </li>
+
+            <li>
+                <a href="profile.html">
+                    <i class="fa-solid fa-user"></i>
+                    Profile
+                </a>
+            </li>
+
+            <li>
+                <a href="rideHistory.html">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    History
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    <i class="fa-solid fa-gear"></i>
+                    Settings
+                </a>
+            </li>
+
+            <li>
+                <a href="login.html">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- Main -->
+
+    <main class="main-content">
+
+        <!-- Top -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h2>Welcome, Om 👋</h2>
+
+                <p>Have a wonderful day.</p>
+
+            </div>
+
+            <div class="top-icons">
+
+                <button id="darkModeBtn">
+                    🌙
+                </button>
+
+                <i class="fa-solid fa-bell"></i>
+
+                <imgsrc="../images/driver.png"
+                class="avatar">
+
+            </div>
+
+        </header>
+
+        <!-- Cards -->
+
+        <section class="cards">
+
+            <div class="card" onclick="location.href='ridebooking.html'">
+
+                <i class="fa-solid fa-taxi"></i>
+
+                <h3>Ride</h3>
+
+                <p>Book your next ride.</p>
+
+            </div>
+
+            <div class="card" onclick="location.href='rentals.html'">
+
+                <i class="fa-solid fa-car"></i>
+
+                <h3>Rentals</h3>
+
+                <p>Rent bikes & cars.</p>
+
+            </div>
+
+            <div class="card" onclick="location.href='grocery.html'">
+
+                <i class="fa-solid fa-cart-shopping"></i>
+
+                <h3>Grocery</h3>
+
+                <p>Order groceries instantly.</p>
+
+            </div>
+
+            <div class="card" onclick="location.href='profile.html'">
+
+                <i class="fa-solid fa-user"></i>
+
+                <h3>Profile</h3>
+
+                <p>Manage your account.</p>
+
+            </div>
+
+        </section>
+
+        <!-- Statistics -->
+
+        <section class="stats">
+
+            <div class="stat-box">
+
+                <h4>Total Rides</h4>
+
+                <h2>26</h2>
+
+            </div>
+
+            <div class="stat-box">
+
+                <h4>Rental Bookings</h4>
+
+                <h2>9</h2>
+
+            </div>
+
+            <div class="stat-box">
+
+                <h4>Orders</h4>
+
+                <h2>31</h2>
+
+            </div>
+
+            <div class="stat-box">
+
+                <h4>Wallet</h4>
+
+                <h2>₹2,450</h2>
+
+            </div>
+
+        </section>
+
+        <!-- Activity -->
+
+        <section class="activity">
+
+            <div class="activity-card">
+
+                <h3>Recent Activity</h3>
+
+                <ul>
+
+                    <li>🚖 Ride completed • ₹235</li>
+
+                    <li>🚗 Hunter 350 booked</li>
+
+                    <li>🛒 Grocery order delivered</li>
+
+                    <li>⭐ You rated your driver 5 stars</li>
+
+                </ul>
+
+            </div>
+
+            <div class="activity-card">
+
+                <h3>Quick Actions</h3>
+
+                <button onclick="location.href='ridebooking.html'">
+
+                    Book Ride
+
+                </button>
+
+                <button onclick="location.href='bikes.html'">
+
+                    Rent Bike
+
+                </button>
+
+                <button onclick="location.href='grocery.html'">
+
+                    Grocery
+
+                </button>
+
+                <button onclick="location.href='rideHistory.html'">
+
+                    History
+
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="../js/dashboard.js"></script>
+
+</body>
+
+</html>

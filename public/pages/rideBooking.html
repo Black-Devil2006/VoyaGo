@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ride Booking | VoyaGo</title>
+
+    <link rel="stylesheet" href="../css/rideBooking.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+
+    <nav>
+        <h2>VoyaGo</h2>
+
+        <a href="/pages/index.html">
+            <i class="fa-solid fa-house"></i> Home
+        </a>
+    </nav>
+
+    <div class="container">
+
+        <div class="left-panel">
+
+            <h1>Book Your Ride</h1>
+
+            <div class="input-box">
+                <i class="fa-solid fa-location-dot"></i>
+                <input type="text" placeholder="Pickup Location">
+            </div>
+
+            <div class="input-box">
+                <i class="fa-solid fa-location-crosshairs"></i>
+                <input type="text" placeholder="Destination">
+            </div>
+
+            <h3>Select Vehicle</h3>
+
+            <div class="vehicles">
+
+                <div class="vehicle-card">
+                    🏍
+                    <h4>Bike</h4>
+                    <p>Fast & Affordable</p>
+                </div>
+
+                <div class="vehicle-card">
+                    🚕
+                    <h4>Auto</h4>
+                    <p>Budget Friendly</p>
+                </div>
+
+                <div class="vehicle-card">
+                    🚘
+                    <h4>Cab</h4>
+                    <p>Comfort Ride</p>
+                </div>
+
+            </div>
+
+            <a href="findDriver.html">
+<button class="book-btn">Continue Booking</button>
+</a>
+        </div>
+
+        <div class="right-panel">
+
+            <div id="map"></div>
+
+        </div>
+
+    </div>
+
+    <script src="../js/rideBooking.js"></script>
+
+</body>
+<script>
+function initMap() {
+
+    const map = new google.maps.Map(document.getElementById("map"), {
+
+        zoom: 13,
+
+        center: {
+            lat: 28.6139,
+            lng: 77.2090
+        }
+
+    });
+
+}
+</script>
+
+<script async
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1Sd3RZe72eW3KtLFSyFcC7sg7That9-M&callback=initMap">
+</script>
+
+</html>

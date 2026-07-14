@@ -1,0 +1,69 @@
+/* ===========================
+   VoyaGo Global Design System
+=========================== */
+
+:root{
+
+    --primary:#00B894;
+    --secondary:#101820;
+    --background:#F5F7FA;
+    --white:#FFFFFF;
+    --danger:#E63946;
+    --warning:#F4A261;
+
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:var(--background);
+    color:#333;
+}
+
+.btn-primary-custom{
+
+    background:var(--primary);
+    color:white;
+    border:none;
+    padding:14px 30px;
+    border-radius:12px;
+    transition:.3s;
+
+}
+
+.btn-primary-custom:hover{
+
+    transform:translateY(-2px);
+    background:#009E74;
+
+}
+
+.card-custom{
+
+    background:white;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    padding:25px;
+
+}
+
+.section-title{
+
+    font-size:38px;
+    font-weight:700;
+    color:var(--secondary);
+
+}
+
+input,
+select,
+textarea{
+
+    border-radius:10px !important;
+
+}

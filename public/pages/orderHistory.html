@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Order History | VoyaGo</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+
+body{
+background:#F5F7FA;
+font-family:Arial,sans-serif;
+}
+
+.header{
+background:#00B894;
+padding:25px;
+color:white;
+margin-bottom:40px;
+}
+
+.order-card{
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+margin-bottom:25px;
+transition:.3s;
+}
+
+.order-card:hover{
+transform:translateY(-5px);
+}
+
+.order-id{
+font-weight:bold;
+font-size:22px;
+}
+
+.status{
+padding:6px 14px;
+border-radius:20px;
+color:white;
+font-size:14px;
+}
+
+.delivered{
+background:#198754;
+}
+
+.processing{
+background:#0d6efd;
+}
+
+.cancelled{
+background:#dc3545;
+}
+
+.items{
+margin-top:20px;
+}
+
+.items li{
+margin-bottom:8px;
+}
+
+.price{
+font-size:24px;
+font-weight:bold;
+color:#00B894;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<div class="container">
+
+<h2>
+
+🛒 Order History
+
+</h2>
+
+<p>
+
+Your Grocery Orders
+
+</p>
+
+</div>
+
+</div>
+
+<div class="container">
+
+<div class="order-card">
+
+<div class="d-flex justify-content-between">
+
+<div>
+
+<div class="order-id">
+
+#VG5001
+
+</div>
+
+<p>
+
+03 July 2026
+
+</p>
+
+</div>
+
+<span class="status delivered">
+
+Delivered
+
+</span>
+
+</div>
+
+<ul class="items">
+
+<li>🥛 Amul Gold Milk ×2</li>
+
+<li>🍎 Apples ×1</li>
+
+<li>🍅 Tomatoes ×3</li>
+
+</ul>
+
+<div class="d-flex justify-content-between align-items-center mt-3">
+
+<div class="price">
+
+₹480
+
+</div>
+
+<button class="btn btn-success">
+
+Order Again
+
+</button>
+
+</div>
+
+</div>
+
+<div class="order-card">
+
+<div class="d-flex justify-content-between">
+
+<div>
+
+<div class="order-id">
+
+#VG4997
+
+</div>
+
+<p>
+
+30 June 2026
+
+</p>
+
+</div>
+
+<span class="status processing">
+
+Processing
+
+</span>
+
+</div>
+
+<ul class="items">
+
+<li>🥤 Sprite ×2</li>
+
+<li>🥔 Potato ×2</li>
+
+</ul>
+
+<div class="d-flex justify-content-between align-items-center mt-3">
+
+<div class="price">
+
+₹160
+
+</div>
+
+<a
+href="dashboard.html"
+class="btn btn-primary">
+
+Dashboard
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

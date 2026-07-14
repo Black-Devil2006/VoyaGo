@@ -1,0 +1,17 @@
+body{
+
+background:#f5f5f5;
+
+font-family:Poppins,sans-serif;
+
+}
+
+.card{
+
+max-width:500px;
+
+margin:auto;
+
+border-radius:20px;
+
+}

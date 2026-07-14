@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ride History | VoyaGo</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+
+body{
+background:#f5f7fa;
+font-family:'Poppins',sans-serif;
+}
+
+.navbar{
+background:#101820;
+}
+
+.navbar-brand{
+font-weight:bold;
+font-size:28px;
+}
+
+.page-title{
+font-size:36px;
+font-weight:700;
+margin:40px 0;
+color:#101820;
+}
+
+.ride-card{
+border:none;
+border-radius:18px;
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+margin-bottom:25px;
+transition:.3s;
+}
+
+.ride-card:hover{
+transform:translateY(-5px);
+}
+
+.price{
+font-size:24px;
+font-weight:bold;
+color:#00B894;
+}
+
+.status{
+font-weight:bold;
+color:#198754;
+}
+
+.footer-btn{
+margin-top:30px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark">
+
+<div class="container">
+
+<a class="navbar-brand" href="#">
+🚖 VoyaGo
+</a>
+
+</div>
+
+</nav>
+
+<div class="container">
+
+<h1 class="page-title">
+My Ride History
+</h1>
+
+<div class="card ride-card">
+
+<div class="card-body">
+
+<h4>🏠 Home → 🏢 Office</h4>
+
+<p>Date : 02 July 2026</p>
+
+<p>Driver : Rohit Sharma</p>
+
+<p>Status :
+<span class="status">
+Completed
+</span>
+</p>
+
+<div class="price">
+₹235
+</div>
+
+</div>
+
+</div>
+
+<div class="card ride-card">
+
+<div class="card-body">
+
+<h4>🏢 Office → 🛍 Mall</h4>
+
+<p>Date : 28 June 2026</p>
+
+<p>Driver : Aman Verma</p>
+
+<p>Status :
+<span class="status">
+Completed
+</span>
+</p>
+
+<div class="price">
+₹180
+</div>
+
+</div>
+
+</div>
+
+<div class="text-center footer-btn">
+
+<button
+class="btn btn-success btn-lg"
+onclick="window.location.href='index.html'">
+
+Book Another Ride
+
+</button>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

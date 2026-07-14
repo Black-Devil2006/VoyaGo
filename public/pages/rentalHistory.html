@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Rental History | VoyaGo</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+
+body{
+
+background:#F5F7FA;
+
+font-family:Arial,sans-serif;
+
+}
+
+.header{
+
+background:#00B894;
+
+color:white;
+
+padding:25px;
+
+margin-bottom:40px;
+
+}
+
+.history-card{
+
+background:white;
+
+border-radius:20px;
+
+padding:25px;
+
+margin-bottom:25px;
+
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+transition:.3s;
+
+}
+
+.history-card:hover{
+
+transform:translateY(-5px);
+
+}
+
+.vehicle{
+
+font-size:24px;
+
+font-weight:bold;
+
+}
+
+.status{
+
+padding:6px 14px;
+
+border-radius:20px;
+
+color:white;
+
+font-size:14px;
+
+}
+
+.completed{
+
+background:#28a745;
+
+}
+
+.active{
+
+background:#0d6efd;
+
+}
+
+.cancelled{
+
+background:#dc3545;
+
+}
+
+.details{
+
+margin-top:20px;
+
+display:grid;
+
+grid-template-columns:repeat(2,1fr);
+
+gap:12px;
+
+}
+
+.details div{
+
+background:#f8f9fa;
+
+padding:12px;
+
+border-radius:10px;
+
+}
+
+.btns{
+
+margin-top:20px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<div class="container">
+
+<h2>
+
+🚗 Rental History
+
+</h2>
+
+<p>
+
+View all your previous rentals
+
+</p>
+
+</div>
+
+</div>
+
+<div class="container">
+
+<div class="history-card">
+
+<div class="d-flex justify-content-between">
+
+<div>
+
+<div class="vehicle">
+
+Mahindra Thar
+
+</div>
+
+<p>
+
+Booking ID : VR10254
+
+</p>
+
+</div>
+
+<span class="status completed">
+
+Completed
+
+</span>
+
+</div>
+
+<div class="details">
+
+<div>
+
+📅 Pickup
+
+<br>
+
+25 June 2026
+
+</div>
+
+<div>
+
+📅 Return
+
+<br>
+
+28 June 2026
+
+</div>
+
+<div>
+
+💰 Amount
+
+<br>
+
+₹6497
+
+</div>
+
+<div>
+
+⭐ Rating
+
+<br>
+
+5/5
+
+</div>
+
+</div>
+
+<div class="btns">
+
+<button class="btn btn-success">
+
+Book Again
+
+</button>
+
+<button class="btn btn-outline-secondary">
+
+Invoice
+
+</button>
+
+</div>
+
+</div>
+
+<div class="history-card">
+
+<div class="d-flex justify-content-between">
+
+<div>
+
+<div class="vehicle">
+
+Royal Enfield Hunter 350
+
+</div>
+
+<p>
+
+Booking ID : VR10230
+
+</p>
+
+</div>
+
+<span class="status active">
+
+Active
+
+</span>
+
+</div>
+
+<div class="details">
+
+<div>
+
+📍 Pickup
+
+<br>
+
+Bhopal
+
+</div>
+
+<div>
+
+📅 Return
+
+<br>
+
+Tomorrow
+
+</div>
+
+<div>
+
+💰 Paid
+
+<br>
+
+₹299
+
+</div>
+
+<div>
+
+Insurance
+
+<br>
+
+Included
+
+</div>
+
+</div>
+
+<div class="btns">
+
+<a
+href="dashboard.html"
+class="btn btn-primary">
+
+Dashboard
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
