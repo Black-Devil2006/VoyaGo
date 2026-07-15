@@ -179,7 +179,7 @@ Your rental vehicle has been booked successfully.
 
 <span>Booking ID</span>
 
-<strong>#VR10254</strong>
+<strong id="bookingId">#VR00000</strong>
 
 </div>
 
@@ -187,7 +187,7 @@ Your rental vehicle has been booked successfully.
 
 <span>Vehicle</span>
 
-<strong>Mahindra Thar</strong>
+<strong id="bookingVehicle">Loading...</strong>
 
 </div>
 
@@ -195,7 +195,7 @@ Your rental vehicle has been booked successfully.
 
 <span>Pickup Date</span>
 
-<strong>Tomorrow</strong>
+<strong id="bookingDate">Loading...</strong>
 
 </div>
 
@@ -230,6 +230,17 @@ Go To Dashboard
 </a>
 
 </div>
+
+<script>
+window.addEventListener("load", () => {
+    const latest = JSON.parse(localStorage.getItem("latestRental"));
+    if (latest) {
+        document.getElementById("bookingId").innerText = latest.id;
+        document.getElementById("bookingVehicle").innerText = latest.vehicleName;
+        document.getElementById("bookingDate").innerText = new Date(latest.pickupDate).toLocaleDateString();
+    }
+});
+</script>
 
 </body>
 

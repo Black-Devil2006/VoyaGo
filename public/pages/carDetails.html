@@ -128,7 +128,8 @@ font-size:18px;
 <div class="col-lg-7">
 
 <img
-src="../images/cars/thar.jpg"
+id="carImage"
+src=""
 class="car-image">
 
 <div class="review">
@@ -165,21 +166,21 @@ Customer Reviews
 
 <div class="info-card">
 
-<h2>
+<h2 id="carName">
 
-Mahindra Thar
+Loading...
 
 </h2>
 
-<div class="rating">
+<div class="rating" id="carRating">
 
-★★★★★ 4.9
+★★★★★ 0.0
 
 </div>
 
-<div class="price">
+<div class="price" id="carPrice">
 
-₹1499/day
+₹0/day
 
 </div>
 
@@ -193,9 +194,9 @@ Seats
 
 </span>
 
-<strong>
+<strong id="carSeats">
 
-4
+-
 
 </strong>
 
@@ -209,9 +210,9 @@ Fuel
 
 </span>
 
-<strong>
+<strong id="carFuel">
 
-Diesel
+-
 
 </strong>
 
@@ -225,9 +226,9 @@ Transmission
 
 </span>
 
-<strong>
+<strong id="carTransmission">
 
-Manual
+-
 
 </strong>
 
@@ -241,9 +242,9 @@ Mileage
 
 </span>
 
-<strong>
+<strong id="carMileage">
 
-15 km/l
+-
 
 </strong>
 
@@ -289,7 +290,7 @@ Availability
 
 </span>
 
-<strong style="color:green;">
+<strong id="carAvailability" style="color:green;">
 
 Available
 
@@ -321,15 +322,8 @@ Back
 
 </div>
 
-<script>
-
-function bookCar(){
-
-window.location.href="rentalPayment.html";
-
-}
-
-</script>
+<script src="../js/vehicles.js"></script>
+<script src="../js/carDetails.js"></script>
 
 </body>
 

@@ -1,3 +1,4 @@
+const path = require("path");
 const cors = require("cors");
 const express = require("express");
 const dotenv = require("dotenv");
@@ -21,7 +22,7 @@ app.use("/api/auth", authRoutes);
 
 app.use(express.static("public"));
 app.get("/", (req, res) => {
-    res.send("🚀 VoyaGo Backend is Running Successfully!");
+    res.sendFile(path.join(__dirname, "public", "pages", "index.html"));
 });
 
 const PORT = process.env.PORT || 5000;
