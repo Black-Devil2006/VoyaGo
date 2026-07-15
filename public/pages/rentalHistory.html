@@ -152,185 +152,68 @@ View all your previous rentals
 
 </div>
 
-<div class="container">
-
-<div class="history-card">
-
-<div class="d-flex justify-content-between">
-
-<div>
-
-<div class="vehicle">
-
-Mahindra Thar
-
+<div class="container" id="historyList">
+    <!-- Will be loaded dynamically from localStorage -->
 </div>
 
-<p>
-
-Booking ID : VR10254
-
-</p>
-
-</div>
-
-<span class="status completed">
-
-Completed
-
-</span>
-
-</div>
-
-<div class="details">
-
-<div>
-
-📅 Pickup
-
-<br>
-
-25 June 2026
-
-</div>
-
-<div>
-
-📅 Return
-
-<br>
-
-28 June 2026
-
-</div>
-
-<div>
-
-💰 Amount
-
-<br>
-
-₹6497
-
-</div>
-
-<div>
-
-⭐ Rating
-
-<br>
-
-5/5
-
-</div>
-
-</div>
-
-<div class="btns">
-
-<button class="btn btn-success">
-
-Book Again
-
-</button>
-
-<button class="btn btn-outline-secondary">
-
-Invoice
-
-</button>
-
-</div>
-
-</div>
-
-<div class="history-card">
-
-<div class="d-flex justify-content-between">
-
-<div>
-
-<div class="vehicle">
-
-Royal Enfield Hunter 350
-
-</div>
-
-<p>
-
-Booking ID : VR10230
-
-</p>
-
-</div>
-
-<span class="status active">
-
-Active
-
-</span>
-
-</div>
-
-<div class="details">
-
-<div>
-
-📍 Pickup
-
-<br>
-
-Bhopal
-
-</div>
-
-<div>
-
-📅 Return
-
-<br>
-
-Tomorrow
-
-</div>
-
-<div>
-
-💰 Paid
-
-<br>
-
-₹299
-
-</div>
-
-<div>
-
-Insurance
-
-<br>
-
-Included
-
-</div>
-
-</div>
-
-<div class="btns">
-
-<a
-href="dashboard.html"
-class="btn btn-primary">
-
-Dashboard
-
-</a>
-
-</div>
-
-</div>
-
-</div>
+<script>
+window.addEventListener("load", () => {
+    const listContainer = document.getElementById("historyList");
+    const rentals = JSON.parse(localStorage.getItem("voyagoRentals")) || [];
+
+    if (rentals.length === 0) {
+        listContainer.innerHTML = `
+            <div class="alert alert-info text-center mt-5 p-5 shadow-sm rounded-4">
+                <h4>No Rental Bookings Found 🚗</h4>
+                <p class="text-muted">You haven't rented any vehicles yet.</p>
+                <a href="rentals.html" class="btn btn-success mt-3 rounded-pill px-4">Rent a Vehicle</a>
+            </div>
+        `;
+        return;
+    }
+
+    listContainer.innerHTML = "";
+    rentals.reverse().forEach(rental => {
+        listContainer.innerHTML += `
+            <div class="history-card">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="vehicle">${rental.vehicleName}</div>
+                        <p class="text-muted mb-0">Booking ID : #${rental.id}</p>
+                    </div>
+                    <span class="status completed">${rental.status}</span>
+                </div>
+                <div class="details">
+                    <div>
+                        📅 Pickup Date<br>
+                        <strong>${new Date(rental.pickupDate).toLocaleDateString()}</strong>
+                    </div>
+                    <div>
+                        📅 Return Date<br>
+                        <strong>${new Date(rental.returnDate).toLocaleDateString()}</strong>
+                    </div>
+                    <div>
+                        💰 Amount<br>
+                        <strong>₹${rental.totalPrice}</strong>
+                    </div>
+                    <div>
+                        📋 Insurance<br>
+                        <strong>Included</strong>
+                    </div>
+                </div>
+                <div class="btns">
+                    <button class="btn btn-success px-4" onclick="location.href='${rental.type === "car" ? "cars.html" : "bikes.html"}'">
+                        Book Again
+                    </button>
+                    <button class="btn btn-outline-secondary px-4 ms-2" onclick="alert('Invoice downloaded for Booking #${rental.id}')">
+                        Invoice
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+});
+</script>
 
 </body>
 

@@ -2,102 +2,69 @@
 <html lang="en">
 
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Bike Details | VoyaGo</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<link rel="stylesheet" href="../css/global.css">
-<link rel="stylesheet" href="../css/rentals.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Vehicle | VoyaGo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/rentals.css">
 </head>
 
 <body>
 
-<nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="rentals.html" id="navTitle">
+                🚗 Vehicle Rental Booking
+            </a>
+            <a href="rentals.html" class="btn btn-outline-light">Cancel</a>
+        </div>
+    </nav>
 
-<div class="container">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-6">
+                <img id="vehicleImage" src="" class="img-fluid rounded shadow" style="height:350px; width:100%; object-fit:cover;">
+            </div>
 
-<a class="navbar-brand fw-bold" href="rentals.html">
+            <div class="col-lg-6">
+                <h1 id="vehicleName">Loading...</h1>
+                <p class="text-muted" id="vehicleRating">⭐ 0.0</p>
+                <h2 class="text-success" id="vehiclePrice">₹0 / Day</h2>
+                <hr>
 
-🏍 Bike Rental
+                <ul class="list-group mb-4" id="vehicleSpecs">
+                    <!-- Loaded dynamically -->
+                </ul>
 
-</a>
+                <div class="card p-4 shadow-sm">
+                    <h4>Select Rental Dates</h4>
+                    <div class="row mt-3">
+                        <div class="col-md-6 mb-3">
+                            <label for="pickupDate" class="form-label">Pickup Date</label>
+                            <input type="date" id="pickupDate" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="returnDate" class="form-label">Return Date</label>
+                            <input type="date" id="returnDate" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <h5>Estimated Total:</h5>
+                        <h3 class="text-success fw-bold" id="totalPrice">Select Dates</h3>
+                    </div>
 
-</div>
+                    <button class="btn btn-success btn-lg w-100 mt-4" id="confirmBtn" onclick="confirmBooking()">
+                        Confirm Rental
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-</nav>
-
-<div class="container mt-5">
-
-<div class="row">
-
-<div class="col-lg-6">
-
-<img src="../images/bike.png"
-class="img-fluid rounded shadow">
-
-</div>
-
-<div class="col-lg-6">
-
-<h1>Royal Enfield Hunter 350</h1>
-
-<p class="text-muted">
-
-⭐ 4.9 (1,254 Reviews)
-
-</p>
-
-<h2 class="text-success">
-
-₹299 / Day
-
-</h2>
-
-<hr>
-
-<ul class="list-group">
-
-<li class="list-group-item">
-Engine : 349cc
-</li>
-
-<li class="list-group-item">
-Mileage : 35 km/l
-</li>
-
-<li class="list-group-item">
-Fuel : Petrol
-</li>
-
-<li class="list-group-item">
-Transmission : Manual
-</li>
-
-<li class="list-group-item">
-Helmet Included
-</li>
-
-</ul>
-
-<button
-class="btn btn-success btn-lg w-100 mt-4"
-onclick="window.location.href='booking.html'">
-
-Book Now
-
-</button>
-
-</div>
-
-</div>
-
-</div>
+    <script src="../js/vehicles.js"></script>
+    <script src="../js/rentalBooking.js"></script>
 
 </body>
-
 </html>

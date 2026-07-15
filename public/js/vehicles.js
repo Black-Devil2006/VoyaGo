@@ -9,7 +9,7 @@ const bikes = [
 {
     id: 1,
     name: "Royal Enfield Hunter 350",
-    image: "../images/bikes/hunter350.jpg",
+    image: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=800&q=80",
     price: 299,
     rating: 4.9,
     engine: "349cc",
@@ -23,7 +23,7 @@ const bikes = [
 {
     id: 2,
     name: "KTM Duke 250",
-    image: "../images/bikes/duke250.jpg",
+    image: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=800&q=80",
     price: 499,
     rating: 4.8,
     engine: "249cc",
@@ -37,7 +37,7 @@ const bikes = [
 {
     id: 3,
     name: "Honda Activa 6G",
-    image: "../images/bikes/activa.jpg",
+    image: "https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?auto=format&fit=crop&w=800&q=80",
     price: 199,
     rating: 4.7,
     engine: "109cc",
@@ -51,7 +51,7 @@ const bikes = [
 {
     id: 4,
     name: "Yamaha R15 V4",
-    image: "../images/bikes/r15.jpg",
+    image: "https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&w=800&q=80",
     price: 599,
     rating: 4.9,
     engine: "155cc",
@@ -65,7 +65,7 @@ const bikes = [
 {
     id: 5,
     name: "TVS Raider 125",
-    image: "../images/bikes/raider.jpg",
+    image: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=800&q=80",
     price: 249,
     rating: 4.6,
     engine: "124cc",
@@ -79,7 +79,7 @@ const bikes = [
 {
     id: 6,
     name: "Royal Enfield Classic 350",
-    image: "../images/bikes/classic350.jpg",
+    image: "https://images.unsplash.com/photo-1615887023516-9b6bcd559e87?auto=format&fit=crop&w=800&q=80",
     price: 399,
     rating: 4.8,
     engine: "349cc",
@@ -99,7 +99,7 @@ const cars = [
 {
     id: 1,
     name: "Hyundai Creta",
-    image: "../images/cars/creta.jpg",
+    image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80",
     price: 999,
     rating: 4.8,
     seats: 5,
@@ -112,7 +112,7 @@ const cars = [
 {
     id: 2,
     name: "Mahindra Thar",
-    image: "../images/cars/thar.jpg",
+    image: "https://images.unsplash.com/photo-1533513780322-147cd259c990?auto=format&fit=crop&w=800&q=80",
     price: 1499,
     rating: 4.9,
     seats: 4,
@@ -125,7 +125,7 @@ const cars = [
 {
     id: 3,
     name: "Tata Nexon",
-    image: "../images/cars/nexon.jpg",
+    image: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80",
     price: 1199,
     rating: 4.8,
     seats: 5,
@@ -138,7 +138,7 @@ const cars = [
 {
     id: 4,
     name: "Maruti Brezza",
-    image: "../images/cars/brezza.jpg",
+    image: "https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=800&q=80",
     price: 899,
     rating: 4.6,
     seats: 5,
@@ -151,7 +151,7 @@ const cars = [
 {
     id: 5,
     name: "Kia Seltos",
-    image: "../images/cars/seltos.jpg",
+    image: "https://images.unsplash.com/photo-1616422285623-13ff0162193c?auto=format&fit=crop&w=800&q=80",
     price: 1299,
     rating: 4.9,
     seats: 5,
@@ -164,7 +164,7 @@ const cars = [
 {
     id: 6,
     name: "Toyota Innova Hycross",
-    image: "../images/cars/innova.jpg",
+    image: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=800&q=80",
     price: 1999,
     rating: 5.0,
     seats: 7,

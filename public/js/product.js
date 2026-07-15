@@ -10,7 +10,7 @@ const products = [
     category:"Milk",
     price:65,
     rating:4.8,
-    image:"../images/grocery/amul-milk.jpg",
+    image:"https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=500&q=80",
     stock:true,
     favorite:false
 },
@@ -21,7 +21,7 @@ const products = [
     category:"Milk",
     price:62,
     rating:4.7,
-    image:"../images/grocery/mother-dairy.jpg",
+    image:"https://images.unsplash.com/photo-1563636619-e9143da7973b?auto=format&fit=crop&w=500&q=80",
     stock:true,
     favorite:false
 },
@@ -32,7 +32,7 @@ const products = [
     category:"Fruits",
     price:180,
     rating:4.9,
-    image:"../images/grocery/apple.jpg",
+    image:"https://images.unsplash.com/photo-1619546813926-a78fa6372cd2?auto=format&fit=crop&w=500&q=80",
     stock:true,
     favorite:false
 },
@@ -43,7 +43,7 @@ const products = [
     category:"Fruits",
     price:55,
     rating:4.6,
-    image:"../images/grocery/banana.jpg",
+    image:"https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=500&q=80",
     stock:true,
     favorite:false
 },
@@ -54,7 +54,7 @@ const products = [
     category:"Fruits",
     price:220,
     rating:4.9,
-    image:"../images/grocery/mango.jpg",
+    image:"https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=500&q=80",
     stock:true,
     favorite:false
 },
@@ -65,7 +65,7 @@ const products = [
     category:"Vegetables",
     price:40,
     rating:4.5,
-    image:"../images/grocery/potato.jpg",
+    image:"https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=500&q=80",
     stock:true,
     favorite:false
 },
@@ -76,7 +76,7 @@ const products = [
     category:"Vegetables",
     price:35,
     rating:4.6,
-    image:"../images/grocery/tomato.jpg",
+    image:"https://images.unsplash.com/photo-1595855759920-86582396756a?auto=format&fit=crop&w=500&q=80",
     stock:true,
     favorite:false
 },
@@ -87,7 +87,7 @@ const products = [
     category:"Vegetables",
     price:50,
     rating:4.4,
-    image:"../images/grocery/onion.jpg",
+    image:"https://images.unsplash.com/photo-1618519764620-7403abdbfee9?auto=format&fit=crop&w=500&q=80",
     stock:true,
     favorite:false
 },
@@ -98,7 +98,7 @@ const products = [
     category:"Beverages",
     price:40,
     rating:4.8,
-    image:"../images/grocery/coke.jpg",
+    image:"https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=500&q=80",
     stock:true,
     favorite:false
 },
@@ -109,7 +109,7 @@ const products = [
     category:"Beverages",
     price:40,
     rating:4.7,
-    image:"../images/grocery/sprite.jpg",
+    image:"https://images.unsplash.com/photo-1624515696530-e90192a64a63?auto=format&fit=crop&w=500&q=80",
     stock:true,
     favorite:false
 }
