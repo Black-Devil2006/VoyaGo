@@ -1,102 +1,178 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ride Booking | VoyaGo</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book a Ride | VoyaGo</title>
 
-    <link rel="stylesheet" href="/css/rideBooking.css">
+  <!-- Bootstrap 5 & FontAwesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <!-- Leaflet CSS for Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- Global Custom Styles -->
+  <link rel="stylesheet" href="../css/global.css">
+  <style>
+    .vehicle-select-card {
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 14px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .vehicle-select-card:hover, .vehicle-select-card.selected {
+      border-color: var(--primary-brand);
+      background: rgba(0, 184, 148, 0.1);
+      transform: translateY(-2px);
+    }
+    #map {
+      height: 100%;
+      min-height: 480px;
+      border-radius: 20px;
+    }
+  </style>
 </head>
 
 <body>
 
-    <nav>
-        <h2>VoyaGo</h2>
+  <!-- NAVBAR -->
+  <nav class="voyago-nav">
+    <div class="container d-flex align-items-center justify-content-between">
+      <a class="voyago-brand" href="/">
+        <span class="logo-icon"><i class="fa-solid fa-bolt"></i></span> VoyaGo
+      </a>
 
-        <a href="/pages/index.html">
-            <i class="fa-solid fa-house"></i> Home
-        </a>
-    </nav>
+      <div class="d-flex align-items-center gap-3">
+        <a class="nav-link-custom" href="/"><i class="fa-solid fa-house me-1"></i> Home</a>
+        <a class="nav-link-custom active" href="/pages/rideBooking.html"><i class="fa-solid fa-taxi me-1"></i> Ride</a>
+        <a class="nav-link-custom" href="/pages/rentals.html"><i class="fa-solid fa-car me-1"></i> Rentals</a>
+        <a class="nav-link-custom" href="/pages/grocery.html"><i class="fa-solid fa-basket-shopping me-1"></i> Grocery</a>
+        <a class="nav-link-custom" href="/pages/dashboard.html"><i class="fa-solid fa-chart-line me-1"></i> Dashboard</a>
 
-    <div class="container">
-
-        <div class="left-panel">
-
-            <h1>Book Your Ride</h1>
-
-            <div class="input-box">
-                <i class="fa-solid fa-location-dot"></i>
-                <input type="text" placeholder="Pickup Location">
-            </div>
-
-            <div class="input-box">
-                <i class="fa-solid fa-location-crosshairs"></i>
-                <input type="text" placeholder="Destination">
-            </div>
-
-            <h3>Select Vehicle</h3>
-
-            <div class="vehicles">
-
-                <div class="vehicle-card">
-                    🏍
-                    <h4>Bike</h4>
-                    <p>Fast & Affordable</p>
-                </div>
-
-                <div class="vehicle-card">
-                    🚕
-                    <h4>Auto</h4>
-                    <p>Budget Friendly</p>
-                </div>
-
-                <div class="vehicle-card">
-                    🚘
-                    <h4>Cab</h4>
-                    <p>Comfort Ride</p>
-                </div>
-
-            </div>
-
-            <a href="/pages/findDriver.html">
-<button class="book-btn">Continue Booking</button>
-</a>
-        </div>
-
-        <div class="right-panel">
-
-            <div id="map"></div>
-
-        </div>
-
+        <button class="btn btn-voyago-outline border-0 py-1 px-2" onclick="VoyaGo.toggleTheme()" title="Toggle Theme">
+          <i class="fa-solid fa-moon fs-5"></i>
+        </button>
+      </div>
     </div>
+  </nav>
 
-    <script src="/js/rideBooking.js"></script>
+  <div class="container py-4">
+    <div class="row g-4">
+      <!-- LEFT PANEL: Ride Controls -->
+      <div class="col-lg-5">
+        <div class="glass-panel p-4">
+          <h2 class="fw-bold mb-4 d-flex align-items-center gap-2">
+            <span class="text-success"><i class="fa-solid fa-route"></i></span> Book Your Ride
+          </h2>
 
+          <form id="rideForm" onsubmit="event.preventDefault(); confirmRideBooking();">
+            <!-- Pickup -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-secondary small">PICKUP LOCATION</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-success border-end-0"><i class="fa-solid fa-circle-dot"></i></span>
+                <input type="text" id="pickupInput" class="form-control border-start-0" placeholder="Enter pickup address..." value="Bandra West, Mumbai" required>
+              </div>
+            </div>
+
+            <!-- Destination -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold text-secondary small">DESTINATION</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-danger border-end-0"><i class="fa-solid fa-location-dot"></i></span>
+                <input type="text" id="destinationInput" class="form-control border-start-0" placeholder="Enter destination..." value="Marine Drive, Mumbai" required>
+              </div>
+            </div>
+
+            <!-- Vehicle Selection -->
+            <h5 class="fw-bold mb-3">Choose Ride Option</h5>
+            <div class="d-flex flex-column gap-3 mb-4">
+              <div class="vehicle-select-card selected d-flex align-items-center justify-content-between" onclick="selectVehicle('Sedan', 245, this)">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="fs-2">🚘</div>
+                  <div>
+                    <h6 class="fw-bold mb-0">Sedan Comfort</h6>
+                    <small class="text-secondary">4 Seats • Top Rated Drivers</small>
+                  </div>
+                </div>
+                <div class="text-end">
+                  <span class="fw-bold fs-5 text-success">₹245</span>
+                  <small class="d-block text-secondary">3 mins away</small>
+                </div>
+              </div>
+
+              <div class="vehicle-select-card d-flex align-items-center justify-content-between" onclick="selectVehicle('Moto', 95, this)">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="fs-2">🏍️</div>
+                  <div>
+                    <h6 class="fw-bold mb-0">VoyaGo Moto</h6>
+                    <small class="text-secondary">1 Seat • Beat traffic instantly</small>
+                  </div>
+                </div>
+                <div class="text-end">
+                  <span class="fw-bold fs-5 text-success">₹95</span>
+                  <small class="d-block text-secondary">2 mins away</small>
+                </div>
+              </div>
+
+              <div class="vehicle-select-card d-flex align-items-center justify-content-between" onclick="selectVehicle('Auto', 140, this)">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="fs-2">🛺</div>
+                  <div>
+                    <h6 class="fw-bold mb-0">Auto Rickshaw</h6>
+                    <small class="text-secondary">3 Seats • Quick local ride</small>
+                  </div>
+                </div>
+                <div class="text-end">
+                  <span class="fw-bold fs-5 text-success">₹140</span>
+                  <small class="d-block text-secondary">4 mins away</small>
+                </div>
+              </div>
+
+              <div class="vehicle-select-card d-flex align-items-center justify-content-between" onclick="selectVehicle('SUV', 380, this)">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="fs-2">🚙</div>
+                  <div>
+                    <h6 class="fw-bold mb-0">VoyaGo SUV XL</h6>
+                    <small class="text-secondary">6 Seats • Extra legroom & luggage</small>
+                  </div>
+                </div>
+                <div class="text-end">
+                  <span class="fw-bold fs-5 text-success">₹380</span>
+                  <small class="d-block text-secondary">5 mins away</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="bookRideBtn" class="btn-voyago w-100 btn-lg">
+              <i class="fa-solid fa-circle-check me-2"></i> Confirm Ride Booking (₹<span id="selectedFare">245</span>)
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL: Leaflet Map -->
+      <div class="col-lg-7">
+        <div class="glass-panel p-3 h-100 position-relative">
+          <div id="map"></div>
+          <div class="position-absolute bottom-0 start-0 m-4 glass-panel py-2 px-3 z-3">
+            <small class="text-secondary d-block"><i class="fa-solid fa-circle-info text-info me-1"></i> Live Route & Traffic Estimation</small>
+            <strong class="text-success"><span id="routeDistance">14.2 km</span> • Approx <span id="routeTime">28 mins</span></strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="../js/script.js"></script>
+  <script src="../js/rideBooking.js"></script>
 </body>
-<script>
-function initMap() {
-
-    const map = new google.maps.Map(document.getElementById("map"), {
-
-        zoom: 13,
-
-        center: {
-            lat: 28.6139,
-            lng: 77.2090
-        }
-
-    });
-
-}
-</script>
-
-<script async
-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1Sd3RZe72eW3KtLFSyFcC7sg7That9-M&callback=initMap">
-</script>
 
 </html>

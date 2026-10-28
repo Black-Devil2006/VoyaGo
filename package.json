@@ -1,18 +1,20 @@
 {
   "name": "voyago",
   "version": "1.0.0",
-  "description": "VoyaGo - Ride Booking, Car Rentals, Grocery Delivery & Travel Platform",
+  "description": "VoyaGo - Professional All-In-One Ride Booking, Car & Bike Rentals, and Instant Grocery Super App",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "tunnel": "npx localtunnel --port 5000"
   },
   "keywords": [
     "voyago",
     "ride-booking",
     "travel",
     "grocery",
-    "rentals"
+    "rentals",
+    "super-app"
   ],
   "author": "Om Singh",
   "license": "MIT",

@@ -1,273 +1,194 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard | VoyaGo</title>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>VoyaGo Dashboard</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-<link rel="stylesheet" href="../css/dashboard.css">
-
+  <!-- Bootstrap 5 & FontAwesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/global.css">
 </head>
 
 <body>
 
-<div class="wrapper">
+  <!-- NAVBAR -->
+  <nav class="voyago-nav">
+    <div class="container d-flex align-items-center justify-content-between">
+      <a class="voyago-brand" href="/">
+        <span class="logo-icon"><i class="fa-solid fa-bolt"></i></span> VoyaGo Dashboard
+      </a>
 
-    <!-- Sidebar -->
+      <div class="d-flex align-items-center gap-3">
+        <a class="nav-link-custom" href="/"><i class="fa-solid fa-house me-1"></i> Home</a>
+        <a class="nav-link-custom" href="/pages/rideBooking.html"><i class="fa-solid fa-taxi me-1"></i> Ride</a>
+        <a class="nav-link-custom" href="/pages/rentals.html"><i class="fa-solid fa-car me-1"></i> Rentals</a>
+        <a class="nav-link-custom" href="/pages/grocery.html"><i class="fa-solid fa-basket-shopping me-1"></i> Grocery</a>
+        <a class="nav-link-custom active" href="/pages/dashboard.html"><i class="fa-solid fa-chart-line me-1"></i> Dashboard</a>
 
-    <aside class="sidebar">
+        <button class="btn btn-voyago-outline border-0 py-1 px-2" onclick="VoyaGo.toggleTheme()" title="Toggle Theme">
+          <i class="fa-solid fa-moon fs-5"></i>
+        </button>
 
-        <div class="logo">
+        <button class="btn btn-outline-danger btn-sm px-3" onclick="VoyaGo.logout()">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+      </div>
+    </div>
+  </nav>
 
-            🚖 <span>VoyaGo</span>
-
+  <div class="container py-4">
+    <!-- Top Greeting Banner -->
+    <div class="glass-panel p-4 mb-4 d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center gap-3">
+        <img id="userAvatarImg" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400" alt="Avatar" class="rounded-circle border border-3 border-success shadow" width="70" height="70" style="object-fit: cover;">
+        <div>
+          <h2 class="fw-bold mb-1" id="dashGreetingHeader">Welcome back 👋</h2>
+          <p class="text-secondary mb-0" id="dashUserEmail">Loading account details...</p>
         </div>
+      </div>
+      <div class="text-end">
+        <span class="badge-pill badge-success mb-1 d-inline-block"><i class="fa-solid fa-shield-halved me-1"></i> Verified Account</span>
+        <div class="fs-4 fw-extrabold text-success">₹<span id="dashWalletBalance">2,450</span> <small class="text-secondary fs-6">Wallet</small></div>
+      </div>
+    </div>
 
-        <ul>
+    <!-- Quick Services Grid -->
+    <div class="row g-4 mb-4">
+      <div class="col-6 col-md-3">
+        <a href="/pages/rideBooking.html" class="text-decoration-none">
+          <div class="glass-panel p-4 text-center h-100">
+            <div class="fs-1 text-success mb-2"><i class="fa-solid fa-taxi"></i></div>
+            <h5 class="fw-bold text-main">Book Ride</h5>
+            <small class="text-secondary">Instant cabs & motos</small>
+          </div>
+        </a>
+      </div>
 
-            <li class="active">
-                <a href="#">
-                    <i class="fa-solid fa-house"></i>
-                    Dashboard
-                </a>
-            </li>
+      <div class="col-6 col-md-3">
+        <a href="/pages/rentals.html" class="text-decoration-none">
+          <div class="glass-panel p-4 text-center h-100">
+            <div class="fs-1 text-info mb-2"><i class="fa-solid fa-car"></i></div>
+            <h5 class="fw-bold text-main">Vehicle Rentals</h5>
+            <small class="text-secondary">Self-drive bikes & cars</small>
+          </div>
+        </a>
+      </div>
 
-            <li>
-                <a href="rideBooking.html">
-                    <i class="fa-solid fa-taxi"></i>
-                    Book Ride
-                </a>
-            </li>
+      <div class="col-6 col-md-3">
+        <a href="/pages/grocery.html" class="text-decoration-none">
+          <div class="glass-panel p-4 text-center h-100">
+            <div class="fs-1 text-danger mb-2"><i class="fa-solid fa-basket-shopping"></i></div>
+            <h5 class="fw-bold text-main">Grocery Mart</h5>
+            <small class="text-secondary">15-min instant delivery</small>
+          </div>
+        </a>
+      </div>
 
-            <li>
-                <a href="rentals.html">
-                    <i class="fa-solid fa-car"></i>
-                    Rentals
-                </a>
-            </li>
+      <div class="col-6 col-md-3">
+        <a href="/pages/profile.html" class="text-decoration-none">
+          <div class="glass-panel p-4 text-center h-100">
+            <div class="fs-1 text-warning mb-2"><i class="fa-solid fa-user-gear"></i></div>
+            <h5 class="fw-bold text-main">My Profile</h5>
+            <small class="text-secondary">Manage profile & wallet</small>
+          </div>
+        </a>
+      </div>
+    </div>
 
-            <li>
-                <a href="grocery.html">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    Grocery
-                </a>
-            </li>
+    <!-- Stats & Activity Row -->
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="glass-panel p-4 h-100">
+          <h5 class="fw-bold mb-4"><i class="fa-solid fa-chart-pie text-success me-2"></i> Activity Statistics</h5>
 
-            <li>
-                <a href="profile.html">
-                    <i class="fa-solid fa-user"></i>
-                    Profile
-                </a>
-            </li>
+          <div class="d-flex align-items-center justify-content-between p-3 glass-panel mb-3">
+            <div class="d-flex align-items-center gap-3">
+              <span class="fs-3">🚕</span>
+              <div>
+                <h6 class="fw-bold mb-0">Total Rides Completed</h6>
+                <small class="text-secondary">Urban commutes</small>
+              </div>
+            </div>
+            <h3 class="fw-bold text-success mb-0" id="statRides">26</h3>
+          </div>
 
-            <li>
-                <a href="rideHistory.html">
-                    <i class="fa-solid fa-clock-rotate-left"></i>
-                    History
-                </a>
-            </li>
+          <div class="d-flex align-items-center justify-content-between p-3 glass-panel mb-3">
+            <div class="d-flex align-items-center gap-3">
+              <span class="fs-3">🔑</span>
+              <div>
+                <h6 class="fw-bold mb-0">Rental Bookings</h6>
+                <small class="text-secondary">Self-drive trips</small>
+              </div>
+            </div>
+            <h3 class="fw-bold text-info mb-0" id="statRentals">9</h3>
+          </div>
 
-            <li>
-                <a href="#">
-                    <i class="fa-solid fa-gear"></i>
-                    Settings
-                </a>
-            </li>
+          <div class="d-flex align-items-center justify-content-between p-3 glass-panel">
+            <div class="d-flex align-items-center gap-3">
+              <span class="fs-3">🛒</span>
+              <div>
+                <h6 class="fw-bold mb-0">Grocery Orders</h6>
+                <small class="text-secondary">Mart deliveries</small>
+              </div>
+            </div>
+            <h3 class="fw-bold text-danger mb-0" id="statOrders">31</h3>
+          </div>
+        </div>
+      </div>
 
-            <li>
-                <a href="login.html">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    Logout
-                </a>
-            </li>
+      <!-- Recent Activity Feed -->
+      <div class="col-lg-8">
+        <div class="glass-panel p-4 h-100">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <h5 class="fw-bold mb-0"><i class="fa-solid fa-clock-rotate-left text-success me-2"></i> Recent Activity</h5>
+            <a href="/pages/rideHistory.html" class="btn-voyago-outline btn-sm">View Full History</a>
+          </div>
 
-        </ul>
-
-    </aside>
-
-    <!-- Main -->
-
-    <main class="main-content">
-
-        <!-- Top -->
-
-        <header class="topbar">
-
-            <div>
-
-                <h2>Welcome, Om 👋</h2>
-
-                <p>Have a wonderful day.</p>
-
+          <div class="d-flex flex-column gap-3" id="dashActivityList">
+            <div class="p-3 glass-panel d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center gap-3">
+                <span class="badge bg-success p-3 rounded-circle"><i class="fa-solid fa-taxi fs-5 text-white"></i></span>
+                <div>
+                  <h6 class="fw-bold mb-0">Ride to Marine Drive</h6>
+                  <small class="text-secondary">Completed • Sedan • Driver Rajesh</small>
+                </div>
+              </div>
+              <span class="fw-bold text-success">₹245</span>
             </div>
 
-            <div class="top-icons">
-
-                <button id="darkModeBtn">
-                    🌙
-                </button>
-
-                <i class="fa-solid fa-bell"></i>
-
-                <img src="../images/driver.png"
-                class="avatar">
-
+            <div class="p-3 glass-panel d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center gap-3">
+                <span class="badge bg-info p-3 rounded-circle"><i class="fa-solid fa-motorcycle fs-5 text-white"></i></span>
+                <div>
+                  <h6 class="fw-bold mb-0">Rental: Royal Enfield Hunter 350</h6>
+                  <small class="text-secondary">Confirmed • 2 Days Rental</small>
+                </div>
+              </div>
+              <span class="fw-bold text-info">₹1,598</span>
             </div>
 
-        </header>
-
-        <!-- Cards -->
-
-        <section class="cards">
-
-            <div class="card" onclick="location.href='rideBooking.html'">
-
-                <i class="fa-solid fa-taxi"></i>
-
-                <h3>Ride</h3>
-
-                <p>Book your next ride.</p>
-
+            <div class="p-3 glass-panel d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center gap-3">
+                <span class="badge bg-danger p-3 rounded-circle"><i class="fa-solid fa-basket-shopping fs-5 text-white"></i></span>
+                <div>
+                  <h6 class="fw-bold mb-0">Grocery Order #ORD-841</h6>
+                  <small class="text-secondary">Delivered in 12 mins</small>
+                </div>
+              </div>
+              <span class="fw-bold text-danger">₹310</span>
             </div>
-
-            <div class="card" onclick="location.href='rentals.html'">
-
-                <i class="fa-solid fa-car"></i>
-
-                <h3>Rentals</h3>
-
-                <p>Rent bikes & cars.</p>
-
-            </div>
-
-            <div class="card" onclick="location.href='grocery.html'">
-
-                <i class="fa-solid fa-cart-shopping"></i>
-
-                <h3>Grocery</h3>
-
-                <p>Order groceries instantly.</p>
-
-            </div>
-
-            <div class="card" onclick="location.href='profile.html'">
-
-                <i class="fa-solid fa-user"></i>
-
-                <h3>Profile</h3>
-
-                <p>Manage your account.</p>
-
-            </div>
-
-        </section>
-
-        <!-- Statistics -->
-
-        <section class="stats">
-
-            <div class="stat-box">
-
-                <h4>Total Rides</h4>
-
-                <h2>26</h2>
-
-            </div>
-
-            <div class="stat-box">
-
-                <h4>Rental Bookings</h4>
-
-                <h2>9</h2>
-
-            </div>
-
-            <div class="stat-box">
-
-                <h4>Orders</h4>
-
-                <h2>31</h2>
-
-            </div>
-
-            <div class="stat-box">
-
-                <h4>Wallet</h4>
-
-                <h2>₹2,450</h2>
-
-            </div>
-
-        </section>
-
-        <!-- Activity -->
-
-        <section class="activity">
-
-            <div class="activity-card">
-
-                <h3>Recent Activity</h3>
-
-                <ul>
-
-                    <li>🚖 Ride completed • ₹235</li>
-
-                    <li>🚗 Hunter 350 booked</li>
-
-                    <li>🛒 Grocery order delivered</li>
-
-                    <li>⭐ You rated your driver 5 stars</li>
-
-                </ul>
-
-            </div>
-
-            <div class="activity-card">
-
-                <h3>Quick Actions</h3>
-
-                <button onclick="location.href='rideBooking.html'">
-
-                    Book Ride
-
-                </button>
-
-                <button onclick="location.href='bikes.html'">
-
-                    Rent Bike
-
-                </button>
-
-                <button onclick="location.href='grocery.html'">
-
-                    Grocery
-
-                </button>
-
-                <button onclick="location.href='rideHistory.html'">
-
-                    History
-
-                </button>
-
-            </div>
-
-        </section>
-
-    </main>
-
-</div>
-
-<script src="../js/dashboard.js"></script>
-
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/script.js"></script>
+  <script src="../js/dashboard.js"></script>
 </body>
 
 </html>

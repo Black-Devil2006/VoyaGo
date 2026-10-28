@@ -1,141 +1,217 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoyaGo - Move, Rent, Shop in One App</title>
+  <meta name="description" content="VoyaGo is your premier all-in-one ride-booking, bike & car rental, and instant grocery delivery platform.">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-<title>VoyaGo</title>
-
-<!-- Bootstrap -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Font Awesome -->
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-<!-- Google Font -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-rel="stylesheet">
-
-<link rel="stylesheet" href="../css/style.css">
-
+  <!-- Custom Design System -->
+  <link rel="stylesheet" href="../css/global.css">
 </head>
 
 <body>
 
-<!-- NAVBAR -->
+  <!-- NAVBAR -->
+  <nav class="voyago-nav">
+    <div class="container d-flex align-items-center justify-content-between">
+      <a class="voyago-brand" href="/">
+        <span class="logo-icon"><i class="fa-solid fa-bolt"></i></span> VoyaGo
+      </a>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
+      <div class="d-flex align-items-center gap-3">
+        <a class="nav-link-custom active" href="/"><i class="fa-solid fa-house me-1"></i> Home</a>
+        <a class="nav-link-custom" href="/pages/rideBooking.html"><i class="fa-solid fa-taxi me-1"></i> Ride</a>
+        <a class="nav-link-custom" href="/pages/rentals.html"><i class="fa-solid fa-car me-1"></i> Rentals</a>
+        <a class="nav-link-custom" href="/pages/grocery.html"><i class="fa-solid fa-basket-shopping me-1"></i> Grocery</a>
+        <a class="nav-link-custom" href="/pages/dashboard.html"><i class="fa-solid fa-chart-line me-1"></i> Dashboard</a>
 
-<div class="container">
+        <!-- Cart Icon -->
+        <a href="/pages/cart.html" class="position-relative nav-link-custom">
+          <i class="fa-solid fa-cart-shopping fs-5"></i>
+          <span id="cartCountBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display:none;">0</span>
+        </a>
 
-<a class="navbar-brand fw-bold fs-2" href="#">
-🟢 VoyaGo
-</a>
+        <!-- Dark Mode Toggle -->
+        <button class="btn btn-voyago-outline border-0 py-1 px-2" onclick="VoyaGo.toggleTheme()" title="Toggle Theme">
+          <i class="fa-solid fa-moon fs-5"></i>
+        </button>
 
-<button class="navbar-toggler"
-type="button"
-data-bs-toggle="collapse"
-data-bs-target="#navbarNav">
+        <!-- Auth Button Dynamic -->
+        <div id="authNavButtons">
+          <a class="btn-voyago" href="/pages/login.html"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+        </div>
+      </div>
+    </div>
+  </nav>
 
-<span class="navbar-toggler-icon"></span>
+  <!-- HERO SECTION -->
+  <section class="py-5 my-3 position-relative">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+          <span class="badge-pill badge-info mb-3 d-inline-block"><i class="fa-solid fa-rocket me-1"></i> All-In-One Super App</span>
+          <h1 class="display-3 fw-extrabold mb-4" style="line-height: 1.15;">
+            Move. Rent. Shop.<br>
+            <span style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Seamlessly Online.</span>
+          </h1>
+          <p class="fs-5 text-secondary mb-4">
+            Book instant rides with live GPS driver tracking, rent luxury cars & bikes per day, or order fresh groceries delivered to your door in 15 minutes.
+          </p>
+          <div class="d-flex flex-wrap gap-3">
+            <a href="/pages/rideBooking.html" class="btn-voyago btn-lg"><i class="fa-solid fa-taxi"></i> Book Instant Ride</a>
+            <a href="/pages/rentals.html" class="btn-voyago-outline btn-lg"><i class="fa-solid fa-car"></i> Explore Rentals</a>
+          </div>
 
-</button>
+          <div class="d-flex align-items-center gap-4 mt-5 pt-3 border-top border-secondary border-opacity-25">
+            <div>
+              <h3 class="fw-bold mb-0" style="color: var(--primary-brand);">100K+</h3>
+              <small class="text-secondary">Happy Riders</small>
+            </div>
+            <div class="vr"></div>
+            <div>
+              <h3 class="fw-bold mb-0" style="color: var(--accent-purple);">4.9 ★</h3>
+              <small class="text-secondary">User Rating</small>
+            </div>
+            <div class="vr"></div>
+            <div>
+              <h3 class="fw-bold mb-0" style="color: var(--accent-pink);">15 Mins</h3>
+              <small class="text-secondary">Avg Grocery ETA</small>
+            </div>
+          </div>
+        </div>
 
-<div class="collapse navbar-collapse"
-id="navbarNav">
+        <div class="col-lg-6">
+          <div class="glass-panel p-3 text-center position-relative">
+            <img src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=900" alt="VoyaGo Hero" class="img-fluid rounded-4 shadow-lg mb-3">
+            <div class="position-absolute bottom-0 start-50 translate-middle-x mb-4 glass-panel py-2 px-4 d-flex align-items-center gap-3">
+              <span class="fs-4">🚕</span>
+              <div class="text-start">
+                <small class="d-block text-secondary">Nearest Driver</small>
+                <strong class="text-success">2 Mins Away • Rajesh (4.9 ★)</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<ul class="navbar-nav ms-auto">
+  <!-- FEATURES GRID -->
+  <section class="py-5 my-4">
+    <div class="container">
+      <div class="text-center max-w-2xl mx-auto mb-5">
+        <h2 class="display-5 fw-bold mb-3">Our Core Services</h2>
+        <p class="text-secondary fs-5">Everything you need to move across town or restock your kitchen.</p>
+      </div>
 
-<li class="nav-item">
-<a class="nav-link" href="/pages/index.html">Home</a>
-</li>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="glass-panel p-4 h-100 text-center">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 70px; height: 70px; background: rgba(0, 184, 148, 0.15); color: #00b894; font-size: 2rem;">
+              <i class="fa-solid fa-taxi"></i>
+            </div>
+            <h3 class="h4 fw-bold mb-2">On-Demand Rides</h3>
+            <p class="text-secondary mb-4">Choose from Moto, Auto, Sedan, or Luxury SUVs with upfront fare estimation and real-time live map tracking.</p>
+            <a href="/pages/rideBooking.html" class="btn-voyago-outline w-100">Book Ride Now <i class="fa-solid fa-arrow-right ms-1"></i></a>
+          </div>
+        </div>
 
-<li class="nav-item">
-<a class="nav-link" href="/pages/rideBooking.html">Ride</a>
-</li>
+        <div class="col-md-4">
+          <div class="glass-panel p-4 h-100 text-center">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 70px; height: 70px; background: rgba(108, 92, 231, 0.15); color: #6c5ce7; font-size: 2rem;">
+              <i class="fa-solid fa-motorcycle"></i>
+            </div>
+            <h3 class="h4 fw-bold mb-2">Self-Drive Rentals</h3>
+            <p class="text-secondary mb-4">Rent premium sports bikes, electric scooters, or off-road SUVs by the day with zero hassle and instant approval.</p>
+            <a href="/pages/rentals.html" class="btn-voyago-outline w-100">Browse Vehicles <i class="fa-solid fa-arrow-right ms-1"></i></a>
+          </div>
+        </div>
 
-<li class="nav-item">
-    <a class="nav-link" href="/pages/rentals.html">Rentals</a>
-</li>
+        <div class="col-md-4">
+          <div class="glass-panel p-4 h-100 text-center">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 70px; height: 70px; background: rgba(253, 121, 168, 0.15); color: #fd79a8; font-size: 2rem;">
+              <i class="fa-solid fa-basket-shopping"></i>
+            </div>
+            <h3 class="h4 fw-bold mb-2">Instant Grocery</h3>
+            <p class="text-secondary mb-4">Order farm-fresh organic produce, dairy, bakery items, and daily snacks delivered straight to your door in minutes.</p>
+            <a href="/pages/grocery.html" class="btn-voyago-outline w-100">Shop Groceries <i class="fa-solid fa-arrow-right ms-1"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<li class="nav-item">
-    <a class="nav-link" href="/pages/grocery.html">Grocery</a>
-</li>
+  <!-- FOOTER -->
+  <footer class="voyago-footer">
+    <div class="container">
+      <div class="row g-4 mb-4">
+        <div class="col-lg-4">
+          <a class="voyago-brand mb-3 d-inline-block" href="#">
+            <span class="logo-icon"><i class="fa-solid fa-bolt"></i></span> VoyaGo
+          </a>
+          <p class="text-secondary">The future of urban mobility and instant local commerce. Experience seamless rides, rentals, and grocery delivery at your fingertips.</p>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5>Services</h5>
+          <ul>
+            <li><a href="/pages/rideBooking.html">Ride Booking</a></li>
+            <li><a href="/pages/rentals.html">Vehicle Rentals</a></li>
+            <li><a href="/pages/grocery.html">Grocery Mart</a></li>
+            <li><a href="/pages/driver.html">Driver Portal</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5>Account</h5>
+          <ul>
+            <li><a href="/pages/dashboard.html">My Dashboard</a></li>
+            <li><a href="/pages/profile.html">Edit Profile</a></li>
+            <li><a href="/pages/rideHistory.html">Ride History</a></li>
+            <li><a href="/pages/login.html">Login / Signup</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4">
+          <h5>Public Deployment</h5>
+          <p class="text-secondary small">VoyaGo is cloud-ready! Run locally or share online globally.</p>
+          <a href="/pages/deploy-guide.html" class="btn-voyago btn-sm"><i class="fa-solid fa-globe"></i> View Deployment Guide</a>
+        </div>
+      </div>
+      <div class="text-center pt-4 border-top border-secondary border-opacity-25 small text-secondary">
+        © 2026 VoyaGo Inc. Built with ❤️ for urban travelers.
+      </div>
+    </div>
+  </footer>
 
-<li class="nav-item">
-<a class="nav-link" href="/pages/login.html">Login</a>
-</li>
-
-<li class="nav-item">
-<a class="btn btn-success ms-2"
-href="/pages/signup.html">
-Sign Up
-</a>
-</li>
-
-</ul>
-
-</div>
-
-</div>
-
-</nav>
-
-<!-- HERO SECTION -->
-
-<section class="hero">
-
-<div class="container">
-
-<div class="row align-items-center">
-
-<div class="col-lg-6">
-
-<h1>
-
-Move.
-<br>
-
-Rent.
-<br>
-
-Shop.
-
-</h1>
-
-<p>
-
-Everything you need in one app.
-
-</p>
-
-<a href="/pages/rideBooking.html"
-class="btn btn-success btn-lg">
-
-🚕 Book Ride
-
-</a>
-
-</div>
-
-<div class="col-lg-6 text-center">
-
-<img src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=900"
-class="img-fluid rounded shadow">
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/script.js"></script>
+  <script>
+    // Update navbar session buttons
+    document.addEventListener("DOMContentLoaded", () => {
+      const user = VoyaGo.getUser();
+      const container = document.getElementById("authNavButtons");
+      if (user && container) {
+        container.innerHTML = `
+          <div class="dropdown">
+            <button class="btn-voyago btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              <i class="fa-solid fa-user-check me-1"></i> ${user.name || 'Account'}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow">
+              <li><a class="dropdown-menu-item dropdown-item" href="/pages/dashboard.html"><i class="fa-solid fa-chart-line me-2"></i> Dashboard</a></li>
+              <li><a class="dropdown-menu-item dropdown-item" href="/pages/profile.html"><i class="fa-solid fa-user me-2"></i> Profile</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-menu-item dropdown-item text-danger" href="#" onclick="VoyaGo.logout()"><i class="fa-solid fa-right-from-bracket me-2"></i> Logout</a></li>
+            </ul>
+          </div>
+        `;
+      }
+    });
+  </script>
 </body>
 
 </html>

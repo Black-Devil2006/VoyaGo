@@ -1,169 +1,122 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ride Tracking | VoyaGo</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Ride Tracking | VoyaGo</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap 5 & FontAwesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet"
-        href="https://unpkg.com/leaflet/dist/leaflet.css">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="../css/rideTracking.css">
-
+  <!-- Global Custom Styles -->
+  <link rel="stylesheet" href="../css/global.css">
+  <style>
+    #trackingMap {
+      height: calc(100vh - 80px);
+      width: 100%;
+      border-radius: 20px;
+    }
+  </style>
 </head>
 
 <body>
 
-<nav class="navbar navbar-dark bg-dark shadow">
-    <div class="container-fluid">
+  <!-- NAVBAR -->
+  <nav class="voyago-nav">
+    <div class="container d-flex align-items-center justify-content-between">
+      <a class="voyago-brand" href="/">
+        <span class="logo-icon"><i class="fa-solid fa-bolt"></i></span> VoyaGo Tracking
+      </a>
 
-        <span class="navbar-brand mb-0 h1">
-            🚖 VoyaGo Live Tracking
-        </span>
-
+      <div class="d-flex align-items-center gap-3">
+        <a class="nav-link-custom" href="/pages/dashboard.html"><i class="fa-solid fa-chart-line me-1"></i> Dashboard</a>
+        <button class="btn btn-voyago-outline border-0 py-1 px-2" onclick="VoyaGo.toggleTheme()" title="Toggle Theme">
+          <i class="fa-solid fa-moon fs-5"></i>
+        </button>
+      </div>
     </div>
-</nav>
-
-<div class="container-fluid">
-
-<div class="row">
-
-<!-- Left Panel -->
-
-<div class="col-lg-4 bg-white shadow p-4 vh-100">
-
-<h2 class="mb-4">
-
-Driver Details
-
-</h2>
-
-<div class="text-center">
-
-<imgsrc="../images/driver.png"
-class="rounded-circle"
-width="140">
-
-</div>
-
-<hr>
-
-<p>
-
-<strong>👨 Driver:</strong>
-
-Rohit Sharma
-
-</p>
-
-<p>
-
-<strong>⭐ Rating:</strong>
-
-4.9
-
-</p>
-
-<p>
-
-<strong>🛵 Vehicle:</strong>
-
-Honda Activa
-
-</p>
-
-<p>
-
-<strong>🚘 Number:</strong>
-
-MP09AB1234
-
-</p>
-
-<hr>
-
-<h5>
-
-Ride Status
-
-</h5>
-
-<p id="rideStatus">
-
-Driver is arriving...
-
-</p>
-
-<h5>
-
-ETA
-
-</h5>
-
-<p id="eta">
-
-5 mins
-
-</p>
-
-<hr>
-
-<div class="d-grid gap-2">
-
-<button class="btn btn-success">
-
-📞 Call Driver
-
-</button>
-
-<button class="btn btn-primary">
-
-💬 Chat
-
-</button>
-
-<button
-class="btn btn-danger"
-onclick="window.location.href='payment.html'">
-
-Complete Ride
-
-</button>
-
-</div>
-
-</div>
-
-<!-- Map -->
-
-<div class="col-lg-8 p-0">
-
-<div id="map"></div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- Leaflet JS -->
-
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-<!-- Ride Tracking JS -->
-
-<script src="../js/rideTracking.js"></script>
-
+  </nav>
+
+  <div class="container-fluid p-3">
+    <div class="row g-3">
+      <!-- LEFT PANEL: Driver & Status -->
+      <div class="col-lg-4">
+        <div class="glass-panel p-4 h-100 d-flex flex-column justify-content-between">
+          <div>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <span class="badge-pill badge-success"><i class="fa-solid fa-circle-dot"></i> Live Tracking Active</span>
+              <small class="text-secondary" id="rideIdBadge">ID: #VG-9842</small>
+            </div>
+
+            <div class="text-center my-3">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400" alt="Driver" class="rounded-circle shadow-lg mb-3 border border-4 border-success" width="100" height="100" style="object-fit: cover;">
+              <h4 class="fw-bold mb-1" id="driverName">Rajesh Kumar</h4>
+              <p class="text-secondary small mb-2"><i class="fa-solid fa-star text-warning"></i> 4.9 Rating (1,240 rides)</p>
+              <span class="badge bg-secondary rounded-pill px-3 py-2" id="driverVehicle">Sedan • MH-02-AB-1234</span>
+            </div>
+
+            <hr class="border-secondary opacity-25">
+
+            <div class="mb-3">
+              <div class="d-flex align-items-center justify-content-between mb-1">
+                <span class="text-secondary small">RIDE STATUS</span>
+                <strong class="text-success" id="rideStatusText">Driver is on the way...</strong>
+              </div>
+              <div class="progress" style="height: 8px;">
+                <div id="rideProgressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 35%;"></div>
+              </div>
+            </div>
+
+            <div class="glass-panel p-3 mb-3 d-flex align-items-center justify-content-between">
+              <div>
+                <small class="text-secondary d-block">ESTIMATED ARRIVAL</small>
+                <h3 class="fw-bold text-success mb-0" id="etaCountdown">4 mins</h3>
+              </div>
+              <div class="text-end">
+                <small class="text-secondary d-block">TOTAL FARE</small>
+                <h3 class="fw-bold mb-0">₹<span id="tripFare">245</span></h3>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <button class="btn btn-voyago-outline w-100 py-2" onclick="VoyaGo.showToast('Calling driver +91 9876543210...', 'info')">
+                  <i class="fa-solid fa-phone me-1 text-success"></i> Call Driver
+                </button>
+              </div>
+              <div class="col-6">
+                <button class="btn btn-voyago-outline w-100 py-2" onclick="VoyaGo.showToast('Opening in-app chat...', 'info')">
+                  <i class="fa-solid fa-message me-1 text-info"></i> Message
+                </button>
+              </div>
+            </div>
+
+            <button class="btn-voyago w-100 btn-lg" onclick="completeCurrentRide()">
+              <i class="fa-solid fa-flag-checkered me-2"></i> Complete & Pay Ride
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL: Animated Map -->
+      <div class="col-lg-8">
+        <div class="glass-panel p-2 h-100">
+          <div id="trackingMap"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="../js/script.js"></script>
+  <script src="../js/rideTracking.js"></script>
 </body>
 
 </html>

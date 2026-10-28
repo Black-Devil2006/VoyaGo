@@ -1,137 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoyaGo Grocery Mart | 15-Min Delivery</title>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>VoyaGo Grocery</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<link rel="stylesheet" href="../css/global.css">
-<link rel="stylesheet" href="../css/grocery.css">
-
+  <!-- Bootstrap 5 & FontAwesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/global.css">
 </head>
 
 <body>
 
-<nav class="navbar navbar-dark bg-dark">
+  <!-- NAVBAR -->
+  <nav class="voyago-nav">
+    <div class="container d-flex align-items-center justify-content-between">
+      <a class="voyago-brand" href="/">
+        <span class="logo-icon"><i class="fa-solid fa-bolt"></i></span> VoyaGo Mart
+      </a>
 
-<div class="container">
+      <div class="d-flex align-items-center gap-3">
+        <a class="nav-link-custom" href="/"><i class="fa-solid fa-house me-1"></i> Home</a>
+        <a class="nav-link-custom" href="/pages/rideBooking.html"><i class="fa-solid fa-taxi me-1"></i> Ride</a>
+        <a class="nav-link-custom" href="/pages/rentals.html"><i class="fa-solid fa-car me-1"></i> Rentals</a>
+        <a class="nav-link-custom active" href="/pages/grocery.html"><i class="fa-solid fa-basket-shopping me-1"></i> Grocery</a>
+        
+        <a href="/pages/cart.html" class="btn btn-voyago position-relative">
+          <i class="fa-solid fa-cart-shopping me-1"></i> Cart
+          <span id="cartCountBadge" class="badge rounded-pill bg-danger ms-1">0</span>
+        </a>
 
-<h2 class="text-white">
-🛒 VoyaGo Grocery
-</h2>
+        <button class="btn btn-voyago-outline border-0 py-1 px-2" onclick="VoyaGo.toggleTheme()" title="Toggle Theme">
+          <i class="fa-solid fa-moon fs-5"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
 
-<a href="index.html"
-class="btn btn-light">
+  <div class="container py-4">
+    <!-- Header Banner -->
+    <div class="glass-panel p-4 mb-4 text-center text-md-start d-md-flex align-items-center justify-content-between">
+      <div>
+        <span class="badge-pill badge-success mb-2 d-inline-block"><i class="fa-solid fa-clock me-1"></i> 15 Minute Superfast Delivery</span>
+        <h1 class="fw-extrabold mb-1">Farm-Fresh Groceries & Essentials</h1>
+        <p class="text-secondary mb-0">Organic fruits, fresh dairy, artisan bakery & daily household snacks.</p>
+      </div>
+      <div class="mt-3 mt-md-0">
+        <a href="/pages/cart.html" class="btn-voyago btn-lg"><i class="fa-solid fa-bag-shopping"></i> Checkout Cart</a>
+      </div>
+    </div>
 
-Home
+    <!-- Search & Category Filters -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-6">
+        <div class="input-group">
+          <span class="input-group-text bg-transparent border-end-0 text-secondary"><i class="fa-solid fa-magnifying-glass"></i></span>
+          <input type="text" id="grocerySearchInput" class="form-control border-start-0" placeholder="Search fresh items, milk, fruits..." oninput="handleGrocerySearch()">
+        </div>
+      </div>
+      <div class="col-md-6 d-flex gap-2 overflow-auto pb-1">
+        <button class="btn btn-voyago btn-sm px-3 cat-btn active" onclick="filterCategory('All', this)">All Items</button>
+        <button class="btn btn-voyago-outline btn-sm px-3 cat-btn" onclick="filterCategory('Fruits & Veggies', this)">🍎 Fruits & Veggies</button>
+        <button class="btn btn-voyago-outline btn-sm px-3 cat-btn" onclick="filterCategory('Dairy & Bakery', this)">🥛 Dairy & Bakery</button>
+        <button class="btn btn-voyago-outline btn-sm px-3 cat-btn" onclick="filterCategory('Beverages', this)">☕ Beverages</button>
+        <button class="btn btn-voyago-outline btn-sm px-3 cat-btn" onclick="filterCategory('Snacks', this)">🍿 Snacks</button>
+      </div>
+    </div>
 
-</a>
+    <!-- Products Grid -->
+    <div class="row g-4" id="groceryProductsGrid">
+      <!-- Injected by JavaScript -->
+    </div>
+  </div>
 
-</div>
-
-</nav>
-
-<div class="container mt-5">
-
-<h1 class="section-title text-center">
-
-Fresh Grocery Delivered Fast
-
-</h1>
-
-<p class="text-center mb-5">
-
-Choose your category
-
-</p>
-
-<div class="row g-4">
-
-<div class="col-lg-3">
-
-<div class="card-custom text-center">
-
-<h1>🥛</h1>
-
-<h3>Milk</h3>
-
-<button
-class="btn-primary-custom mt-3">
-
-View
-
-</button>
-
-</div>
-
-</div>
-
-<div class="col-lg-3">
-
-<div class="card-custom text-center">
-
-<h1>🥬</h1>
-
-<h3>Vegetables</h3>
-
-<button
-class="btn-primary-custom mt-3">
-
-View
-
-</button>
-
-</div>
-
-</div>
-
-<div class="col-lg-3">
-
-<div class="card-custom text-center">
-
-<h1>🍎</h1>
-
-<h3>Fruits</h3>
-
-<button
-class="btn-primary-custom mt-3">
-
-View
-
-</button>
-
-</div>
-
-</div>
-
-<div class="col-lg-3">
-
-<div class="card-custom text-center">
-
-<h1>🥤</h1>
-
-<h3>Beverages</h3>
-
-<button
-class="btn-primary-custom mt-3">
-
-View
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/script.js"></script>
+  <script src="../js/grocery.js"></script>
 </body>
 
 </html>

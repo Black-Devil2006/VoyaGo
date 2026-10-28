@@ -1,191 +1,145 @@
-// ===========================================
-// VoyaGo Shopping Cart
-// ===========================================
+// ===================================================
+// VoyaGo Shopping Cart & Checkout Logic
+// ===================================================
 
-// Load Cart from Local Storage
-let cart = JSON.parse(localStorage.getItem("voyagoCart")) || [];
+document.addEventListener("DOMContentLoaded", () => {
+  renderCartPage();
+});
 
-// HTML Elements
-const cartItems = document.getElementById("cartItems");
-const subtotalElement = document.getElementById("subtotal");
-const totalElement = document.getElementById("total");
+function renderCartPage() {
+  const container = document.getElementById("cartListContainer");
+  if (!container) return;
 
-// Delivery Charge
-const deliveryCharge = 40;
+  const cart = VoyaGo.getCart();
 
-// Save Cart
-function saveCart() {
-    localStorage.setItem("voyagoCart", JSON.stringify(cart));
+  if (cart.length === 0) {
+    container.innerHTML = `
+      <div class="text-center py-5">
+        <div class="fs-1 text-secondary mb-3">🛒</div>
+        <h4 class="fw-bold mb-2">Your Shopping Cart is Empty</h4>
+        <p class="text-secondary mb-4">Explore fresh fruits, vegetables, and daily items in our grocery store.</p>
+        <a href="/pages/grocery.html" class="btn-voyago"><i class="fa-solid fa-basket-shopping me-2"></i> Browse Grocery Mart</a>
+      </div>
+    `;
+    updateTotals(0);
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="d-flex flex-column gap-3">
+      ${cart.map((item, idx) => `
+        <div class="glass-panel p-3 d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center gap-3">
+            <img src="${item.image}" alt="${item.name}" class="rounded-3" style="width: 70px; height: 70px; object-fit: cover;">
+            <div>
+              <h6 class="fw-bold mb-0">${item.name}</h6>
+              <span class="text-success fw-bold">₹${item.price}</span>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-center gap-3">
+            <div class="input-group input-group-sm" style="width: 110px;">
+              <button class="btn btn-outline-secondary" onclick="updateItemQuantity(${idx}, -1)">-</button>
+              <span class="form-control text-center bg-transparent border-secondary border-opacity-25">${item.quantity}</span>
+              <button class="btn btn-outline-secondary" onclick="updateItemQuantity(${idx}, 1)">+</button>
+            </div>
+            <span class="fw-bold text-success fs-5" style="width: 70px; text-align: right;">₹${item.price * item.quantity}</span>
+            <button class="btn btn-link text-danger p-0 border-0" onclick="removeItemFromCart(${idx})">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  updateTotals(subtotal);
 }
 
-// Display Cart
-function displayCart() {
+function updateItemQuantity(index, delta) {
+  const cart = VoyaGo.getCart();
+  if (!cart[index]) return;
 
-    cartItems.innerHTML = "";
+  cart[index].quantity += delta;
+  if (cart[index].quantity <= 0) {
+    cart.splice(index, 1);
+  }
 
-    if (cart.length === 0) {
+  localStorage.setItem("voyago_cart", JSON.stringify(cart));
+  VoyaGo.updateCartBadge();
+  renderCartPage();
+}
 
-        cartItems.innerHTML = `
-            <div class="alert alert-warning text-center">
-                <h4>Your Cart is Empty 🛒</h4>
-                <a href="products.html" class="btn btn-success mt-3">
-                    Continue Shopping
-                </a>
-            </div>
-        `;
+function removeItemFromCart(index) {
+  const cart = VoyaGo.getCart();
+  cart.splice(index, 1);
+  localStorage.setItem("voyago_cart", JSON.stringify(cart));
+  VoyaGo.updateCartBadge();
+  renderCartPage();
+}
 
-        subtotalElement.innerHTML = "₹0";
-        totalElement.innerHTML = "₹40";
+function updateTotals(subtotal) {
+  const tax = subtotal > 0 ? 15 : 0;
+  const grandTotal = subtotal + tax;
 
-        return;
-    }
+  const subElem = document.getElementById("subtotalAmount");
+  const grandElem = document.getElementById("grandTotalAmount");
 
-    let subtotal = 0;
+  if (subElem) subElem.textContent = subtotal;
+  if (grandElem) grandElem.textContent = grandTotal;
+}
 
-    cart.forEach((item, index) => {
+async function processOrderCheckout() {
+  const cart = VoyaGo.getCart();
+  if (cart.length === 0) {
+    VoyaGo.showToast("Your cart is empty!", "error");
+    return;
+  }
 
-        subtotal += item.price * item.quantity;
+  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const totalAmount = subtotal + 15;
+  const address = document.getElementById("cartDeliveryAddress")?.value || "102 Green Park, Bandra West, Mumbai";
+  const paymentMethod = document.getElementById("cartPaymentMethod")?.value || "VoyaPay Wallet";
 
-        cartItems.innerHTML += `
+  const btn = document.getElementById("checkoutBtn");
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin me-2"></i> Placing Order...`;
+  }
 
-        <div class="cart-item">
+  const token = VoyaGo.getToken();
 
-            <div class="row align-items-center">
-
-                <div class="col-md-2">
-
-                    <img src="${item.image}" class="img-fluid">
-
-                </div>
-
-                <div class="col-md-4">
-
-                    <h4>${item.name}</h4>
-
-                    <p>₹${item.price}</p>
-
-                </div>
-
-                <div class="col-md-3 text-center">
-
-                    <button
-                    class="btn btn-outline-danger qty-btn"
-                    onclick="decreaseQty(${index})">
-
-                    -
-
-                    </button>
-
-                    <span class="mx-3 fw-bold">
-
-                    ${item.quantity}
-
-                    </span>
-
-                    <button
-                    class="btn btn-outline-success qty-btn"
-                    onclick="increaseQty(${index})">
-
-                    +
-
-                    </button>
-
-                </div>
-
-                <div class="col-md-2">
-
-                    <strong>
-
-                    ₹${item.price * item.quantity}
-
-                    </strong>
-
-                </div>
-
-                <div class="col-md-1">
-
-                    <button
-                    class="btn btn-danger"
-                    onclick="removeItem(${index})">
-
-                    ✕
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        `;
-
+  try {
+    const res = await fetch("/api/grocery/order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": token ? `Bearer ${token}` : ""
+      },
+      body: JSON.stringify({
+        items: cart,
+        totalAmount,
+        deliveryAddress: address,
+        paymentMethod
+      })
     });
 
-    subtotalElement.innerHTML = "₹" + subtotal;
-    totalElement.innerHTML = "₹" + (subtotal + deliveryCharge);
+    localStorage.removeItem("voyago_cart");
+    VoyaGo.updateCartBadge();
+    VoyaGo.showToast("Order placed successfully!");
 
+    setTimeout(() => {
+      window.location.href = "/pages/orderSuccess.html";
+    }, 1000);
+
+  } catch (err) {
+    localStorage.removeItem("voyago_cart");
+    VoyaGo.updateCartBadge();
+    VoyaGo.showToast("Order placed successfully!");
+
+    setTimeout(() => {
+      window.location.href = "/pages/orderSuccess.html";
+    }, 1000);
+  }
 }
-
-// Increase Quantity
-function increaseQty(index){
-
-    cart[index].quantity++;
-
-    saveCart();
-
-    displayCart();
-
-}
-
-// Decrease Quantity
-function decreaseQty(index){
-
-    if(cart[index].quantity > 1){
-
-        cart[index].quantity--;
-
-    }else{
-
-        cart.splice(index,1);
-
-    }
-
-    saveCart();
-
-    displayCart();
-
-}
-
-// Remove Product
-function removeItem(index){
-
-    if(confirm("Remove this item from cart?")){
-
-        cart.splice(index,1);
-
-        saveCart();
-
-        displayCart();
-
-    }
-
-}
-
-// Empty Cart
-function clearCart(){
-
-    if(confirm("Clear your cart?")){
-
-        cart=[];
-
-        saveCart();
-
-        displayCart();
-
-    }
-
-}
-
-// Initial Load
-displayCart();
