@@ -401,3 +401,263 @@ body {
   background: rgba(0, 184, 148, 0.18);
   color: #00b894;
 }
+
+/* ===================================================
+   Uber & Rapido Rider Map Experience Styles
+   =================================================== */
+
+/* Custom Uber Vehicle Map Pins */
+.uber-vehicle-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.35));
+}
+
+.uber-vehicle-marker .vehicle-icon-body {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  border: 2px solid #ffffff;
+}
+
+.uber-vehicle-marker .vehicle-sub-tag {
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  margin-top: -3px;
+  white-space: nowrap;
+}
+
+/* Rapido Bike Colors (Yellow & Charcoal) */
+.badge-rapido-bike .vehicle-icon-body {
+  background: #f1c40f;
+  color: #111111;
+  border-color: #111111;
+}
+.badge-rapido-bike .vehicle-sub-tag {
+  background: #111111;
+  color: #f1c40f;
+}
+
+/* Auto Rickshaw Colors (Green & Yellow) */
+.badge-auto .vehicle-icon-body {
+  background: #00b894;
+  color: #ffffff;
+  border-color: #f1c40f;
+}
+.badge-auto .vehicle-sub-tag {
+  background: #2d3436;
+  color: #55efc4;
+}
+
+/* UberGo Sedan Colors (Sleek Dark Modern) */
+.badge-sedan .vehicle-icon-body {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #00b894;
+}
+.badge-sedan .vehicle-sub-tag {
+  background: #00b894;
+  color: #ffffff;
+}
+
+/* Uber Premier / SUV Colors */
+.badge-suv .vehicle-icon-body {
+  background: #2c3e50;
+  color: #ffffff;
+  border-color: #9b59b6;
+}
+.badge-suv .vehicle-sub-tag {
+  background: #9b59b6;
+  color: #ffffff;
+}
+
+/* Uber Floating Route Pins */
+.uber-pin-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.uber-pin-label {
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  white-space: nowrap;
+  margin-bottom: 2px;
+}
+
+.uber-pickup-pin .uber-pin-marker-body {
+  width: 22px;
+  height: 22px;
+  background: #00b894;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(0,184,148,0.6);
+}
+
+.uber-pickup-pin .uber-pin-square {
+  width: 8px;
+  height: 8px;
+  background: #ffffff;
+  border-radius: 1px;
+}
+
+.uber-drop-pin .uber-pin-marker-body {
+  width: 22px;
+  height: 22px;
+  background: #fd79a8;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(253,121,168,0.6);
+}
+
+.uber-drop-pin .uber-pin-circle {
+  width: 8px;
+  height: 8px;
+  background: #ffffff;
+  border-radius: 50%;
+}
+
+.uber-pin-stem {
+  width: 2px;
+  height: 10px;
+  background: #0f172a;
+}
+
+/* Full-Screen Uber/Rapido Rider Viewport */
+.rider-app-viewport {
+  position: relative;
+  height: calc(100vh - 72px);
+  width: 100%;
+  overflow: hidden;
+}
+
+#riderFullscreenMap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Floating Ride Selector Drawer (Uber/Rapido style) */
+.rider-floating-drawer {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  width: 440px;
+  max-width: calc(100vw - 48px);
+  max-height: calc(100% - 40px);
+  background: rgba(15, 23, 42, 0.94);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .rider-floating-drawer {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    max-height: 70vh;
+    border-radius: 24px 24px 0 0;
+  }
+}
+
+.rider-drawer-header {
+  padding: 20px 24px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rider-drawer-content {
+  padding: 18px 24px;
+  overflow-y: auto;
+}
+
+.rider-address-card {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+/* Rapido & Uber Ride Cards */
+.rider-option-card {
+  background: rgba(30, 41, 59, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rider-option-card:hover {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(0, 184, 148, 0.5);
+  transform: translateY(-2px);
+}
+
+.rider-option-card.active {
+  background: rgba(0, 184, 148, 0.12);
+  border-color: #00b894;
+  box-shadow: 0 4px 20px rgba(0, 184, 148, 0.25);
+}
+
+.rider-option-badge {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 6px;
+  margin-left: 6px;
+}
+
+.badge-rapido-tag {
+  background: #f1c40f;
+  color: #111;
+}
+
+.badge-uber-tag {
+  background: #00b894;
+  color: #fff;
+}
+

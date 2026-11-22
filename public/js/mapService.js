@@ -178,9 +178,78 @@ const VoyaGoMap = {
       "🛰️ Satellite": satelliteLayer,
       "🏔️ Topo": topoLayer
     }, null, { position: "topright" }).addTo(map);
-    }, null, { position: "topright" }).addTo(map);
 
     return map;
+  },
+
+  /**
+   * Real Turn-by-Turn Road Routing via OSRM (Uber/Rapido style)
+   */
+  async getRoadRoute(startLat, startLng, endLat, endLng) {
+    try {
+      const url = `https://router.project-osrm.org/route/v1/driving/${startLng},${startLat};${endLng},${endLat}?overview=full&geometries=geojson`;
+      const res = await fetch(url);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.routes && data.routes.length > 0) {
+          const route = data.routes[0];
+          const coords = route.geometry.coordinates.map((c) => [c[1], c[0]]);
+          return {
+            coords,
+            distanceKm: (route.distance / 1000).toFixed(1),
+            durationMins: Math.max(1, Math.round(route.duration / 60))
+          };
+        }
+      }
+    } catch (e) {
+      console.warn("OSRM road route failed, using straight-line fallback:", e);
+    }
+
+    // Straight-line fallback if OSRM is unreachable
+    const dist = VoyaGoMap.getDistance(startLat, startLng, endLat, endLng);
+    return {
+      coords: [[startLat, startLng], [endLat, endLng]],
+      distanceKm: dist.toFixed(1),
+      durationMins: Math.max(1, Math.round(dist * 3))
+    };
+  },
+
+  /**
+   * Calculate navigation bearing (heading in degrees)
+   */
+  calculateBearing(lat1, lon1, lat2, lon2) {
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const y = Math.sin(dLon) * Math.cos(lat2 * Math.PI / 180);
+    const x =
+      Math.cos(lat1 * Math.PI / 180) * Math.sin(lat2 * Math.PI / 180) -
+      Math.sin(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.cos(dLon);
+    let brng = Math.atan2(y, x) * 180 / Math.PI;
+    return (brng + 360) % 360;
+  },
+
+  /**
+   * Draw double-layered Uber/Rapido high-contrast road polyline
+   */
+  drawUberRoute(map, coords) {
+    // Outer shadow/casing
+    const casing = L.polyline(coords, {
+      color: "#0f172a",
+      weight: 8,
+      opacity: 0.65,
+      lineCap: "round",
+      lineJoin: "round"
+    }).addTo(map);
+
+    // Inner bright Emerald line
+    const core = L.polyline(coords, {
+      color: "#00b894",
+      weight: 5,
+      opacity: 0.95,
+      lineCap: "round",
+      lineJoin: "round"
+    }).addTo(map);
+
+    return { casing, core };
   },
 
   /**
@@ -202,17 +271,81 @@ const VoyaGoMap = {
   },
 
   /**
-   * Create vehicle icon (car, bike, auto, suv)
+   * Create vehicle icon with Uber / Rapido branding and styling
    */
   createVehicleIcon(type = "car") {
-    const emojis = { car: "🚕", bike: "🏍️", auto: "🛺", suv: "🚙" };
-    const emoji = emojis[type.toLowerCase()] || "🚕";
+    const t = type.toLowerCase();
+    let badgeClass = "badge-sedan";
+    let iconHtml = "🚗";
+    let label = "UberGo";
+
+    if (t.includes("bike") || t.includes("moto")) {
+      badgeClass = "badge-rapido-bike";
+      iconHtml = "🏍️";
+      label = "Rapido";
+    } else if (t.includes("auto")) {
+      badgeClass = "badge-auto";
+      iconHtml = "🛺";
+      label = "Auto";
+    } else if (t.includes("suv") || t.includes("xl") || t.includes("premier")) {
+      badgeClass = "badge-suv";
+      iconHtml = "🚙";
+      label = "UberXL";
+    }
+
     return L.divIcon({
-      html: `<div class="vehicle-map-pin">${emoji}</div>`,
-      className: "custom-vehicle-marker",
-      iconSize: [34, 34],
-      iconAnchor: [17, 17],
-      popupAnchor: [0, -17]
+      html: `
+        <div class="uber-vehicle-marker ${badgeClass}">
+          <div class="vehicle-icon-body">${iconHtml}</div>
+          <div class="vehicle-sub-tag">${label}</div>
+        </div>
+      `,
+      className: "custom-uber-vehicle",
+      iconSize: [44, 44],
+      iconAnchor: [22, 22],
+      popupAnchor: [0, -22]
+    });
+  },
+
+  /**
+   * Signature Uber Square Pickup Pin
+   */
+  createUberPickupPin(labelText = "Pickup Point") {
+    return L.divIcon({
+      html: `
+        <div class="uber-pin-wrapper uber-pickup-pin">
+          <div class="uber-pin-label">${labelText}</div>
+          <div class="uber-pin-marker-body">
+            <div class="uber-pin-square"></div>
+          </div>
+          <div class="uber-pin-stem"></div>
+        </div>
+      `,
+      className: "custom-uber-pin",
+      iconSize: [120, 56],
+      iconAnchor: [60, 56],
+      popupAnchor: [0, -56]
+    });
+  },
+
+  /**
+   * Signature Uber Destination Pin
+   */
+  createUberDropPin(labelText = "Destination") {
+    return L.divIcon({
+      html: `
+        <div class="uber-pin-wrapper uber-drop-pin">
+          <div class="uber-pin-label">${labelText}</div>
+          <div class="uber-pin-marker-body">
+            <div class="uber-pin-circle"></div>
+          </div>
+          <div class="uber-pin-stem"></div>
+        </div>
+      `,
+      className: "custom-uber-pin",
+      iconSize: [120, 56],
+      iconAnchor: [60, 56],
+      popupAnchor: [0, -56]
     });
   },
 

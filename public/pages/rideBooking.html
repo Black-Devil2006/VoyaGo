@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Book a Ride | VoyaGo</title>
+  <title>VoyaGo Rider | Real-time Cab & Rapido Bike Booking</title>
 
   <!-- Bootstrap 5 & FontAwesome -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -15,24 +15,174 @@
 
   <!-- Global Custom Styles -->
   <link rel="stylesheet" href="../css/global.css">
+
   <style>
-    .vehicle-select-card {
-      background: var(--card-bg);
-      border: 2px solid var(--card-border);
+    /* Fullscreen Rider Map Layout */
+    .rider-container {
+      position: relative;
+      height: calc(100vh - 68px);
+      width: 100%;
+      overflow: hidden;
+    }
+
+    #map {
+      height: 100%;
+      width: 100%;
+      z-index: 1;
+    }
+
+    /* Uber / Rapido Floating Side Panel */
+    .uber-panel {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 420px;
+      max-width: calc(100vw - 32px);
+      max-height: calc(100% - 32px);
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .uber-panel {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: 100%;
+        max-height: 65vh;
+        border-radius: 24px 24px 0 0;
+      }
+    }
+
+    .uber-panel-header {
+      padding: 16px 20px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .uber-panel-body {
+      padding: 16px 20px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .address-field-wrap {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .address-suggestions-box {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      max-height: 180px;
+      overflow-y: auto;
+      z-index: 1001;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    /* Ride Selector Cards */
+    .ride-card {
+      background: rgba(30, 41, 59, 0.4);
+      border: 2px solid rgba(255, 255, 255, 0.08);
       border-radius: 14px;
-      padding: 16px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+
+    .ride-card:hover {
+      background: rgba(30, 41, 59, 0.85);
+      border-color: rgba(0, 184, 148, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .ride-card.selected {
+      background: rgba(0, 184, 148, 0.12);
+      border-color: #00b894;
+      box-shadow: 0 4px 16px rgba(0, 184, 148, 0.2);
+    }
+
+    .badge-rapido {
+      background: #f1c40f;
+      color: #111;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-uber {
+      background: #00b894;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* Floating Route Info Banner */
+    .floating-route-pill {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 1000;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 50px;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    /* Floating Recenter GPS Button */
+    .floating-recenter-btn {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #00b894;
+      color: white;
+      border: none;
+      box-shadow: 0 8px 24px rgba(0, 184, 148, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
       cursor: pointer;
       transition: all 0.2s ease;
     }
-    .vehicle-select-card:hover, .vehicle-select-card.selected {
-      border-color: var(--primary-brand);
-      background: rgba(0, 184, 148, 0.1);
-      transform: translateY(-2px);
-    }
-    #map {
-      height: 100%;
-      min-height: 480px;
-      border-radius: 20px;
+
+    .floating-recenter-btn:hover {
+      transform: scale(1.1);
+      background: #00a383;
     }
   </style>
 </head>
@@ -60,121 +210,174 @@
     </div>
   </nav>
 
-  <div class="container py-4">
-    <div class="row g-4">
-      <!-- LEFT PANEL: Ride Controls -->
-      <div class="col-lg-5">
-        <div class="glass-panel p-4">
-          <h2 class="fw-bold mb-4 d-flex align-items-center gap-2">
-            <span class="text-success"><i class="fa-solid fa-route"></i></span> Book Your Ride
-          </h2>
+  <!-- RIDER VIEWPORT -->
+  <div class="rider-container">
 
-          <form id="rideForm" onsubmit="event.preventDefault(); confirmRideBooking();">
-            <!-- Pickup -->
-            <div class="mb-3">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <label class="form-label fw-semibold text-secondary small mb-0">PICKUP LOCATION</label>
-                <button type="button" class="btn btn-link text-success p-0 small text-decoration-none fw-bold" onclick="useCurrentLocationForPickup()" style="font-size: 12px;">
-                  <i class="fa-solid fa-crosshairs me-1"></i> Detect Location
-                </button>
-              </div>
-              <div class="input-group">
-                <span class="input-group-text bg-transparent text-success border-end-0"><i class="fa-solid fa-circle-dot"></i></span>
-                <input type="text" id="pickupInput" class="form-control border-start-0 border-end-0" placeholder="Enter pickup address..." value="Bandra West, Mumbai" required>
-                <button class="btn btn-outline-success border-start-0" type="button" onclick="useCurrentLocationForPickup()" title="Use GPS Location">
-                  <i class="fa-solid fa-location-crosshairs"></i>
-                </button>
-              </div>
-            </div>
+    <!-- The Leaflet Map Canvas (Full Viewport) -->
+    <div id="map"></div>
 
-            <!-- Destination -->
-            <div class="mb-4">
-              <label class="form-label fw-semibold text-secondary small">DESTINATION</label>
-              <div class="input-group">
-                <span class="input-group-text bg-transparent text-danger border-end-0"><i class="fa-solid fa-location-dot"></i></span>
-                <input type="text" id="destinationInput" class="form-control border-start-0" placeholder="Enter destination..." value="Marine Drive, Mumbai" required>
-              </div>
-            </div>
-
-            <!-- Vehicle Selection -->
-            <h5 class="fw-bold mb-3">Choose Ride Option</h5>
-            <div class="d-flex flex-column gap-3 mb-4">
-              <div class="vehicle-select-card selected d-flex align-items-center justify-content-between" onclick="selectVehicle('Sedan', 245, this)">
-                <div class="d-flex align-items-center gap-3">
-                  <div class="fs-2">🚘</div>
-                  <div>
-                    <h6 class="fw-bold mb-0">Sedan Comfort</h6>
-                    <small class="text-secondary">4 Seats • Top Rated Drivers</small>
-                  </div>
-                </div>
-                <div class="text-end">
-                  <span class="fw-bold fs-5 text-success">₹245</span>
-                  <small class="d-block text-secondary">3 mins away</small>
-                </div>
-              </div>
-
-              <div class="vehicle-select-card d-flex align-items-center justify-content-between" onclick="selectVehicle('Moto', 95, this)">
-                <div class="d-flex align-items-center gap-3">
-                  <div class="fs-2">🏍️</div>
-                  <div>
-                    <h6 class="fw-bold mb-0">VoyaGo Moto</h6>
-                    <small class="text-secondary">1 Seat • Beat traffic instantly</small>
-                  </div>
-                </div>
-                <div class="text-end">
-                  <span class="fw-bold fs-5 text-success">₹95</span>
-                  <small class="d-block text-secondary">2 mins away</small>
-                </div>
-              </div>
-
-              <div class="vehicle-select-card d-flex align-items-center justify-content-between" onclick="selectVehicle('Auto', 140, this)">
-                <div class="d-flex align-items-center gap-3">
-                  <div class="fs-2">🛺</div>
-                  <div>
-                    <h6 class="fw-bold mb-0">Auto Rickshaw</h6>
-                    <small class="text-secondary">3 Seats • Quick local ride</small>
-                  </div>
-                </div>
-                <div class="text-end">
-                  <span class="fw-bold fs-5 text-success">₹140</span>
-                  <small class="d-block text-secondary">4 mins away</small>
-                </div>
-              </div>
-
-              <div class="vehicle-select-card d-flex align-items-center justify-content-between" onclick="selectVehicle('SUV', 380, this)">
-                <div class="d-flex align-items-center gap-3">
-                  <div class="fs-2">🚙</div>
-                  <div>
-                    <h6 class="fw-bold mb-0">VoyaGo SUV XL</h6>
-                    <small class="text-secondary">6 Seats • Extra legroom & luggage</small>
-                  </div>
-                </div>
-                <div class="text-end">
-                  <span class="fw-bold fs-5 text-success">₹380</span>
-                  <small class="d-block text-secondary">5 mins away</small>
-                </div>
-              </div>
-            </div>
-
-            <!-- Submit Button -->
-            <button type="submit" id="bookRideBtn" class="btn-voyago w-100 btn-lg">
-              <i class="fa-solid fa-circle-check me-2"></i> Confirm Ride Booking (₹<span id="selectedFare">245</span>)
-            </button>
-          </form>
-        </div>
-      </div>
-
-      <!-- RIGHT PANEL: Leaflet Map -->
-      <div class="col-lg-7">
-        <div class="glass-panel p-3 h-100 position-relative">
-          <div id="map"></div>
-          <div class="position-absolute bottom-0 start-0 m-4 glass-panel py-2 px-3 z-3">
-            <small class="text-secondary d-block"><i class="fa-solid fa-circle-info text-info me-1"></i> Live Route & Traffic Estimation</small>
-            <strong class="text-success"><span id="routeDistance">14.2 km</span> • Approx <span id="routeTime">28 mins</span></strong>
-          </div>
+    <!-- Floating Live Route Pill (Top Right) -->
+    <div class="floating-route-pill d-none d-md-flex">
+      <div class="d-flex align-items-center gap-2">
+        <span class="text-success fs-5"><i class="fa-solid fa-diamond-turn-right"></i></span>
+        <div>
+          <small class="text-secondary d-block" style="font-size: 11px;">FASTEST STREET ROUTE (OSRM)</small>
+          <strong class="text-white"><span id="routeDistance">-- km</span> • <span id="routeTime">-- mins</span></strong>
         </div>
       </div>
     </div>
+
+    <!-- Floating Recenter / Locate Me Button -->
+    <button class="floating-recenter-btn" onclick="useCurrentLocationForPickup()" title="Recenter on My Location">
+      <i class="fa-solid fa-crosshairs"></i>
+    </button>
+
+    <!-- Floating Uber / Rapido Booking Drawer -->
+    <div class="uber-panel">
+      <!-- Panel Header -->
+      <div class="uber-panel-header d-flex align-items-center justify-content-between">
+        <div>
+          <h5 class="fw-bold mb-0 text-white"><i class="fa-solid fa-route text-success me-2"></i>Where to?</h5>
+          <small class="text-secondary" style="font-size: 12px;">Real turn-by-turn road navigation</small>
+        </div>
+        <span class="badge-pill badge-success" style="font-size: 11px;">
+          <i class="fa-solid fa-circle-dot me-1"></i> Live Fleet
+        </span>
+      </div>
+
+      <!-- Panel Body -->
+      <div class="uber-panel-body">
+        <form id="rideForm" onsubmit="event.preventDefault(); confirmRideBooking();">
+
+          <!-- Pickup Address Input -->
+          <div class="address-field-wrap">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <small class="text-secondary fw-bold" style="font-size: 10px;">PICKUP LOCATION</small>
+              <button type="button" class="btn btn-link text-success p-0 text-decoration-none fw-bold" onclick="useCurrentLocationForPickup()" style="font-size: 11px;">
+                <i class="fa-solid fa-location-crosshairs me-1"></i> Detect GPS
+              </button>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-success"><i class="fa-solid fa-circle"></i></span>
+              <input type="text" id="pickupInput" class="form-control bg-transparent border-0 text-white p-0 shadow-none" placeholder="Enter pickup address..." value="Bandra West, Mumbai" required autocomplete="off">
+            </div>
+            <div id="pickupSuggestions" class="address-suggestions-box" style="display:none;"></div>
+          </div>
+
+          <!-- Destination Address Input -->
+          <div class="address-field-wrap">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <small class="text-secondary fw-bold" style="font-size: 10px;">DESTINATION (DROP-OFF)</small>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-danger"><i class="fa-solid fa-square"></i></span>
+              <input type="text" id="destinationInput" class="form-control bg-transparent border-0 text-white p-0 shadow-none" placeholder="Enter destination..." value="Marine Drive, Mumbai" required autocomplete="off">
+            </div>
+            <div id="destSuggestions" class="address-suggestions-box" style="display:none;"></div>
+          </div>
+
+          <!-- Quick Suggested Destinations -->
+          <div class="d-flex gap-2 mb-3 overflow-x-auto pb-1" style="font-size: 11px;">
+            <button type="button" class="btn btn-sm btn-voyago-outline py-1 px-2 text-nowrap" onclick="setQuickDestination('Airport Terminal 2, Mumbai')">✈️ Airport</button>
+            <button type="button" class="btn btn-sm btn-voyago-outline py-1 px-2 text-nowrap" onclick="setQuickDestination('Bandra Kurla Complex (BKC), Mumbai')">🏢 BKC Hub</button>
+            <button type="button" class="btn btn-sm btn-voyago-outline py-1 px-2 text-nowrap" onclick="setQuickDestination('Chhatrapati Shivaji Maharaj Terminus (CSMT), Mumbai')">🚆 Station</button>
+            <button type="button" class="btn btn-sm btn-voyago-outline py-1 px-2 text-nowrap" onclick="setQuickDestination('Juhu Beach, Mumbai')">🏖️ Juhu</button>
+          </div>
+
+          <!-- Ride Options List (Rapido & Uber styled) -->
+          <h6 class="fw-bold text-white mb-2" style="font-size: 13px;">Available Options</h6>
+          <div class="d-flex flex-column gap-2 mb-3">
+
+            <!-- Rapido Moto -->
+            <div class="ride-card selected" onclick="selectVehicle('Rapido Moto', 49, this)">
+              <div class="d-flex align-items-center gap-3">
+                <div class="fs-2">🏍️</div>
+                <div>
+                  <div class="d-flex align-items-center">
+                    <strong class="text-white">Rapido Moto</strong>
+                    <span class="badge-rapido ms-2">RAPIDO</span>
+                  </div>
+                  <small class="text-secondary d-block">Fastest • Beat peak traffic</small>
+                </div>
+              </div>
+              <div class="text-end">
+                <span class="fw-bold fs-5 text-success">₹<span class="fare-val">49</span></span>
+                <small class="d-block text-secondary" style="font-size: 11px;">2 mins away</small>
+              </div>
+            </div>
+
+            <!-- Auto Rickshaw -->
+            <div class="ride-card" onclick="selectVehicle('VoyaGo Auto', 89, this)">
+              <div class="d-flex align-items-center gap-3">
+                <div class="fs-2">🛺</div>
+                <div>
+                  <div class="d-flex align-items-center">
+                    <strong class="text-white">VoyaGo Auto</strong>
+                  </div>
+                  <small class="text-secondary d-block">Doorstep pickup • Up to 3 seats</small>
+                </div>
+              </div>
+              <div class="text-end">
+                <span class="fw-bold fs-5 text-success">₹<span class="fare-val">89</span></span>
+                <small class="d-block text-secondary" style="font-size: 11px;">3 mins away</small>
+              </div>
+            </div>
+
+            <!-- UberGo Sedan -->
+            <div class="ride-card" onclick="selectVehicle('UberGo Sedan', 195, this)">
+              <div class="d-flex align-items-center gap-3">
+                <div class="fs-2">🚗</div>
+                <div>
+                  <div class="d-flex align-items-center">
+                    <strong class="text-white">UberGo Sedan</strong>
+                    <span class="badge-uber ms-2">POPULAR</span>
+                  </div>
+                  <small class="text-secondary d-block">AC Comfort • Top rated drivers</small>
+                </div>
+              </div>
+              <div class="text-end">
+                <span class="fw-bold fs-5 text-success">₹<span class="fare-val">195</span></span>
+                <small class="d-block text-secondary" style="font-size: 11px;">4 mins away</small>
+              </div>
+            </div>
+
+            <!-- Uber Premier SUV -->
+            <div class="ride-card" onclick="selectVehicle('Premier SUV', 290, this)">
+              <div class="d-flex align-items-center gap-3">
+                <div class="fs-2">🚙</div>
+                <div>
+                  <div class="d-flex align-items-center">
+                    <strong class="text-white">Premier SUV</strong>
+                  </div>
+                  <small class="text-secondary d-block">6 Seats • Extra legroom & luggage</small>
+                </div>
+              </div>
+              <div class="text-end">
+                <span class="fw-bold fs-5 text-success">₹<span class="fare-val">290</span></span>
+                <small class="d-block text-secondary" style="font-size: 11px;">5 mins away</small>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Payment Selector -->
+          <div class="d-flex align-items-center justify-content-between p-2 rounded-3 mb-3" style="background: rgba(30,41,59,0.5); font-size: 12px;">
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-success"><i class="fa-solid fa-wallet"></i></span>
+              <span class="text-white">Payment: <strong>Cash / UPI on Arrival</strong></span>
+            </div>
+            <span class="text-success fw-bold" style="cursor:pointer;" onclick="VoyaGo.showToast('Payment method set to UPI/Cash')">Change</span>
+          </div>
+
+          <!-- Confirm Action Button -->
+          <button type="submit" id="bookRideBtn" class="btn-voyago w-100 btn-lg py-3 fw-bold">
+            <i class="fa-solid fa-bolt me-2"></i> Request <span id="btnRideName">Rapido Moto</span> (₹<span id="selectedFare">49</span>)
+          </button>
+
+        </form>
+      </div>
+    </div>
+
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
