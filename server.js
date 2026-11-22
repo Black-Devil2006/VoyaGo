@@ -62,7 +62,11 @@ app.get("/pages/:page", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`🚀 VoyaGo Server running smoothly on port ${PORT}`);
-  console.log(`🌐 Local URL: http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(PORT, () => {
+    console.log(`🚀 VoyaGo Server running smoothly on port ${PORT}`);
+    console.log(`🌐 Local URL: http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;
