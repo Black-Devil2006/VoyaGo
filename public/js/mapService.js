@@ -4,27 +4,34 @@
 // ===================================================
 
 const VoyaGoMap = {
-  // Available Tile Layers
+  // Available Tile Layers (100% Free, No Watermark, No API Key Required)
   TILES: {
-    voyager: {
-      url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+    streets: {
+      url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
       options: {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        attribution: 'Tiles &copy; Esri &mdash; StreetMap',
+        maxZoom: 19
+      }
+    },
+    humanitarian: {
+      url: "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
+      options: {
+        attribution: '&copy; OpenStreetMap contributors, Humanitarian style',
         maxZoom: 19,
-        subdomains: "abcd"
+        subdomains: "abc"
       }
     },
     satellite: {
       url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
       options: {
-        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics',
         maxZoom: 18
       }
     },
-    osm: {
-      url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    topo: {
+      url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
       options: {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        attribution: 'Tiles &copy; Esri &mdash; Topographic',
         maxZoom: 19
       }
     }
@@ -158,16 +165,19 @@ const VoyaGoMap = {
 
     const map = L.map(elementId, { zoomControl: true }).setView(center, zoom);
 
-    // Default Street layer
-    const streetLayer = L.tileLayer(VoyaGoMap.TILES.voyager.url, VoyaGoMap.TILES.voyager.options).addTo(map);
+    // Default Street layer (Clean, Free, No API Key, No Watermark)
+    const streetLayer = L.tileLayer(VoyaGoMap.TILES.streets.url, VoyaGoMap.TILES.streets.options).addTo(map);
+    const hotLayer = L.tileLayer(VoyaGoMap.TILES.humanitarian.url, VoyaGoMap.TILES.humanitarian.options);
     const satelliteLayer = L.tileLayer(VoyaGoMap.TILES.satellite.url, VoyaGoMap.TILES.satellite.options);
-    const osmLayer = L.tileLayer(VoyaGoMap.TILES.osm.url, VoyaGoMap.TILES.osm.options);
+    const topoLayer = L.tileLayer(VoyaGoMap.TILES.topo.url, VoyaGoMap.TILES.topo.options);
 
     // Layer switch control
     L.control.layers({
       "🗺️ Streets": streetLayer,
+      "📍 Detailed (OSM HOT)": hotLayer,
       "🛰️ Satellite": satelliteLayer,
-      "🌐 OpenStreetMap": osmLayer
+      "🏔️ Topo": topoLayer
+    }, null, { position: "topright" }).addTo(map);
     }, null, { position: "topright" }).addTo(map);
 
     return map;
@@ -286,3 +296,4 @@ const VoyaGoMap = {
 };
 
 window.VoyaGoMap = VoyaGoMap;
+

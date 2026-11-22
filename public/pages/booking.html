@@ -86,9 +86,9 @@
         if (!hubMapEl || typeof L === "undefined") return;
 
         const map = L.map("hubMap", { zoomControl: false }).setView(hubCoords, 13);
-        L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-            attribution: '&copy; OpenStreetMap &copy; CARTO',
-            maxZoom: 18
+        L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
+            attribution: 'Tiles &copy; Esri',
+            maxZoom: 19
         }).addTo(map);
 
         const hubMarker = L.marker(hubCoords, {

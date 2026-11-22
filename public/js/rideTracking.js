@@ -43,11 +43,10 @@ function initTrackingMap() {
 
   trackingMap = L.map("trackingMap", { zoomControl: true }).setView(routePoints[0], 13);
 
-  // CartoDB Voyager tiles — beautiful, free
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    maxZoom: 19,
-    subdomains: "abcd"
+  // Esri World Street Map (100% Free, No Watermark, No API Key Required)
+  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
+    attribution: 'Tiles &copy; Esri &mdash; StreetMap',
+    maxZoom: 19
   }).addTo(trackingMap);
 
   // Animated dashed route polyline

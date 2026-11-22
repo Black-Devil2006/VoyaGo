@@ -61,21 +61,27 @@ function initRideMap() {
 
   map = L.map("map", { zoomControl: true }).setView(defaultPickup, 12);
 
-  // CartoDB Voyager Streets layer
-  const streetLayer = L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    maxZoom: 19,
-    subdomains: "abcd"
+  // Esri World Street Map (100% Free, No Watermark, No API Key Required)
+  const streetLayer = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
+    attribution: 'Tiles &copy; Esri &mdash; StreetMap',
+    maxZoom: 19
   }).addTo(map);
 
   // Satellite layer option
   const satLayer = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
-    attribution: 'Tiles &copy; Esri',
+    attribution: 'Tiles &copy; Esri &mdash; Satellite',
     maxZoom: 18
   });
 
+  // Detailed OSM HOT layer
+  const hotLayer = L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
+    attribution: '&copy; OpenStreetMap contributors, Humanitarian style',
+    maxZoom: 19,
+    subdomains: "abc"
+  });
+
   // Layer control
-  L.control.layers({ "🗺️ Streets": streetLayer, "🛰️ Satellite": satLayer }, null, { position: "topright" }).addTo(map);
+  L.control.layers({ "🗺️ Streets": streetLayer, "📍 Detailed (OSM)": hotLayer, "🛰️ Satellite": satLayer }, null, { position: "topright" }).addTo(map);
 
   // Green pickup marker (using custom pulsing or icon)
   const greenIcon = (window.VoyaGoMap && VoyaGoMap.createPinIcon)

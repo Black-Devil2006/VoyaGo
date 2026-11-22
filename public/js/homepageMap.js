@@ -177,3 +177,4 @@ function updateLocationStatus(msg, type) {
   const el = document.getElementById("userDetectedAddress");
   if (el) el.textContent = msg;
 }
+
