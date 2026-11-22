@@ -35,37 +35,67 @@ document.addEventListener("DOMContentLoaded", () => {
   setupAddressSearch();
 });
 
+let bookingDrivers = [];
+
 function initRideMap() {
   const mapElement = document.getElementById("map");
   if (!mapElement) return;
 
-  const defaultPickup = [19.0596, 72.8295]; // Bandra
+  // Check URL query parameters for pre-selected location
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlLat = parseFloat(urlParams.get("lat"));
+  const urlLng = parseFloat(urlParams.get("lng"));
+  const urlAddr = urlParams.get("addr");
+  const urlType = urlParams.get("type");
+
+  let defaultPickup = [19.0596, 72.8295]; // Bandra
   const defaultDest   = [18.9438, 72.8234]; // Marine Drive
+
+  if (!isNaN(urlLat) && !isNaN(urlLng)) {
+    defaultPickup = [urlLat, urlLng];
+    if (urlAddr) {
+      const pInput = document.getElementById("pickupInput");
+      if (pInput) pInput.value = decodeURIComponent(urlAddr);
+    }
+  }
 
   map = L.map("map", { zoomControl: true }).setView(defaultPickup, 12);
 
-  // Beautiful map tiles (CartoDB Voyager - free, no key)
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+  // CartoDB Voyager Streets layer
+  const streetLayer = L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
     maxZoom: 19,
     subdomains: "abcd"
   }).addTo(map);
 
-  // Green pickup marker
-  const greenIcon = L.divIcon({
-    html: `<div style="background:#00b894;width:18px;height:18px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 3px #00b894,0 2px 8px rgba(0,184,148,0.5);"></div>`,
-    iconSize: [24, 24], iconAnchor: [12, 12], className: ""
+  // Satellite layer option
+  const satLayer = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+    attribution: 'Tiles &copy; Esri',
+    maxZoom: 18
   });
 
+  // Layer control
+  L.control.layers({ "🗺️ Streets": streetLayer, "🛰️ Satellite": satLayer }, null, { position: "topright" }).addTo(map);
+
+  // Green pickup marker (using custom pulsing or icon)
+  const greenIcon = (window.VoyaGoMap && VoyaGoMap.createPinIcon)
+    ? VoyaGoMap.createPinIcon("#00b894", "📍")
+    : L.divIcon({
+        html: `<div style="background:#00b894;width:18px;height:18px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 3px #00b894,0 2px 8px rgba(0,184,148,0.5);"></div>`,
+        iconSize: [24, 24], iconAnchor: [12, 12], className: ""
+      });
+
   // Red destination marker
-  const redIcon = L.divIcon({
-    html: `<div style="background:#fd79a8;width:18px;height:18px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 3px #fd79a8,0 2px 8px rgba(253,121,168,0.5);"></div>`,
-    iconSize: [24, 24], iconAnchor: [12, 12], className: ""
-  });
+  const redIcon = (window.VoyaGoMap && VoyaGoMap.createPinIcon)
+    ? VoyaGoMap.createPinIcon("#fd79a8", "🏁")
+    : L.divIcon({
+        html: `<div style="background:#fd79a8;width:18px;height:18px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 3px #fd79a8,0 2px 8px rgba(253,121,168,0.5);"></div>`,
+        iconSize: [24, 24], iconAnchor: [12, 12], className: ""
+      });
 
   pickupMarker = L.marker(defaultPickup, { icon: greenIcon, draggable: true })
     .addTo(map)
-    .bindPopup("<b>📍 Pickup:</b> Bandra West, Mumbai")
+    .bindPopup(`<b>📍 Pickup:</b> ${urlAddr ? decodeURIComponent(urlAddr) : "Bandra West, Mumbai"}`)
     .openPopup();
 
   destMarker = L.marker(defaultDest, { icon: redIcon, draggable: true })
@@ -78,6 +108,11 @@ function initRideMap() {
 
   map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
   updateRouteInfo(defaultPickup, defaultDest);
+
+  // Spawn simulated available drivers around pickup
+  if (window.VoyaGoMap && VoyaGoMap.spawnNearbyDrivers) {
+    bookingDrivers = VoyaGoMap.spawnNearbyDrivers(map, defaultPickup[0], defaultPickup[1], 3);
+  }
 
   // Draggable marker events
   pickupMarker.on("dragend", async (e) => {
@@ -112,17 +147,41 @@ function initRideMap() {
     refreshRoute();
   });
 
-  // Try to get user's real location
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(async (pos) => {
-      const userLatLng = [pos.coords.latitude, pos.coords.longitude];
-      pickupMarker.setLatLng(userLatLng);
-      map.panTo(userLatLng);
-      const addr = await reverseGeocode(userLatLng[0], userLatLng[1]);
-      document.getElementById("pickupInput").value = addr;
-      pickupMarker.bindPopup(`<b>📍 Your Location:</b> ${addr.substring(0, 50)}...`).openPopup();
+  // If no URL coordinates were provided, attempt auto-detect
+  if (isNaN(urlLat) && window.VoyaGoMap) {
+    VoyaGoMap.getUserLocation().then((loc) => {
+      pickupMarker.setLatLng([loc.lat, loc.lng]);
+      document.getElementById("pickupInput").value = loc.address;
+      pickupMarker.bindPopup(`<b>📍 Your Location:</b> ${loc.address}`).openPopup();
       refreshRoute();
-    }, () => { /* permission denied – keep default */ }, { timeout: 5000 });
+    }).catch(() => {});
+  }
+}
+
+/**
+ * Triggered by the "Detect My Location" button
+ */
+async function useCurrentLocationForPickup() {
+  if (!window.VoyaGoMap) return;
+  if (window.VoyaGo && VoyaGo.showToast) {
+    VoyaGo.showToast("Detecting your location...", "info");
+  }
+
+  try {
+    const loc = await VoyaGoMap.getUserLocation();
+    pickupMarker.setLatLng([loc.lat, loc.lng]);
+    map.panTo([loc.lat, loc.lng]);
+    const input = document.getElementById("pickupInput");
+    if (input) input.value = loc.address;
+    pickupMarker.bindPopup(`<b>📍 Your Location:</b> ${loc.address}`).openPopup();
+    refreshRoute();
+    if (window.VoyaGo && VoyaGo.showToast) {
+      VoyaGo.showToast("Pickup updated to your location!");
+    }
+  } catch (err) {
+    if (window.VoyaGo && VoyaGo.showToast) {
+      VoyaGo.showToast("Could not detect location.", "warning");
+    }
   }
 }
 

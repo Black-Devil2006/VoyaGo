@@ -7,6 +7,8 @@
     <title>Ride Started | VoyaGo</title>
 
     <link rel="stylesheet" href="/css/rideBooking.css">
+    <!-- Leaflet Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <style>
         body{
@@ -98,9 +100,7 @@
 
 <div class="map">
 
-<i frame
-src="https://maps.google.com/maps?q=Delhi&t=&z=13&ie=UTF8&iwloc=&output=embed">
-</i frame>
+<div id="rideStartedMap" style="height: 100%; width: 100%;"></div>
 
 </div>
 
@@ -148,7 +148,55 @@ Start Live Tracking
 
 </div>
 
-<script src="../js/rideTracking.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="../js/mapService.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.getElementById("rideStartedMap");
+  if (!container || typeof L === "undefined") return;
+
+  const startCoords = [19.0596, 72.8295]; // Bandra West
+  const destCoords = [18.9438, 72.8234];  // Marine Drive
+
+  const map = L.map("rideStartedMap", { zoomControl: true }).setView(startCoords, 13);
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+    attribution: '&copy; OpenStreetMap &copy; CARTO',
+    maxZoom: 19
+  }).addTo(map);
+
+  const route = [
+    startCoords,
+    [19.0440, 72.8320],
+    [19.0300, 72.8260],
+    [19.0150, 72.8250],
+    [18.9900, 72.8240],
+    [18.9750, 72.8235],
+    [18.9600, 72.8234],
+    destCoords
+  ];
+
+  // Route polyline
+  const polyline = L.polyline(route, { color: "#00b894", weight: 6, opacity: 0.85, dashArray: "8 6" }).addTo(map);
+  map.fitBounds(polyline.getBounds(), { padding: [50, 50] });
+
+  // Pickup & Dest Markers
+  L.marker(startCoords, { icon: VoyaGoMap.createPinIcon("#00b894", "📍") }).addTo(map).bindPopup("<b>Pickup:</b> Your Location");
+  L.marker(destCoords, { icon: VoyaGoMap.createPinIcon("#fd79a8", "🏁") }).addTo(map).bindPopup("<b>Destination:</b> Marine Drive");
+
+  // Driver Marker
+  const driverIcon = VoyaGoMap.createVehicleIcon("auto");
+  const driverMarker = L.marker(startCoords, { icon: driverIcon }).addTo(map).bindPopup("<b>Rohit Sharma</b> (Activa)").openPopup();
+
+  let idx = 0;
+  setInterval(() => {
+    idx = (idx + 1) % route.length;
+    driverMarker.setLatLng(route[idx]);
+    const remaining = Math.max(1, Math.round((route.length - 1 - idx) * 1.2));
+    const etaEl = document.getElementById("eta");
+    if (etaEl) etaEl.textContent = `${remaining} mins`;
+  }, 2500);
+});
+</script>
 
 </body>
 

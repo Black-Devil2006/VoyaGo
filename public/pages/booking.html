@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Vehicle | VoyaGo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/rentals.css">
 </head>
@@ -25,6 +27,16 @@
         <div class="row">
             <div class="col-lg-6">
                 <img id="vehicleImage" src="" class="img-fluid rounded shadow" style="height:350px; width:100%; object-fit:cover;">
+
+                <!-- Pickup Hub Map -->
+                <div class="card p-3 shadow-sm mt-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="fw-bold mb-0"><i class="fa-solid fa-location-dot text-success me-1"></i> Pickup Station</h6>
+                        <span class="badge bg-success" id="hubDistanceBadge">Detecting distance...</span>
+                    </div>
+                    <div id="hubMap" style="height: 200px; border-radius: 10px; width: 100%;"></div>
+                    <small class="text-muted mt-2 d-block">📍 VoyaGo Central Hub • Bandra West, Mumbai</small>
+                </div>
             </div>
 
             <div class="col-lg-6">
@@ -63,8 +75,42 @@
         </div>
     </div>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="../js/mapService.js"></script>
     <script src="../js/vehicles.js"></script>
     <script src="../js/rentalBooking.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const hubCoords = [19.0596, 72.8295]; // Bandra Hub
+        const hubMapEl = document.getElementById("hubMap");
+        if (!hubMapEl || typeof L === "undefined") return;
+
+        const map = L.map("hubMap", { zoomControl: false }).setView(hubCoords, 13);
+        L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+            attribution: '&copy; OpenStreetMap &copy; CARTO',
+            maxZoom: 18
+        }).addTo(map);
+
+        const hubMarker = L.marker(hubCoords, {
+            icon: VoyaGoMap.createPinIcon("#00b894", "🏢")
+        }).addTo(map).bindPopup("<b>VoyaGo Bandra Hub</b><br>Vehicle ready for pickup!").openPopup();
+
+        try {
+            const loc = await VoyaGoMap.getUserLocation();
+            const userMarker = L.marker([loc.lat, loc.lng], { icon: VoyaGoMap.createUserIcon() }).addTo(map);
+            userMarker.bindPopup("<b>Your Location</b>");
+            const dist = VoyaGoMap.getDistance(loc.lat, loc.lng, hubCoords[0], hubCoords[1]);
+            const badge = document.getElementById("hubDistanceBadge");
+            if (badge) badge.textContent = `${dist.toFixed(1)} km away (~${Math.round(dist * 3)} mins)`;
+
+            const bounds = L.latLngBounds([hubCoords, [loc.lat, loc.lng]]);
+            map.fitBounds(bounds, { padding: [40, 40] });
+        } catch (e) {
+            const badge = document.getElementById("hubDistanceBadge");
+            if (badge) badge.textContent = "Open 24/7";
+        }
+    });
+    </script>
 
 </body>
 </html>

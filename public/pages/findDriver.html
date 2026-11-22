@@ -1,33 +1,141 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" data-theme="dark">
+
 <head>
-    <title>Finding Driver</title>
-    <link rel="stylesheet" href="../css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radar Search: Finding Driver | VoyaGo</title>
+
+  <!-- Bootstrap 5 & FontAwesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="../css/global.css">
+
+  <style>
+    #radarMap {
+      height: 380px;
+      width: 100%;
+      border-radius: 18px;
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="finding-driver">
+  <!-- NAVBAR -->
+  <nav class="voyago-nav">
+    <div class="container d-flex align-items-center justify-content-between">
+      <a class="voyago-brand" href="/">
+        <span class="logo-icon"><i class="fa-solid fa-bolt"></i></span> VoyaGo Radar
+      </a>
+      <a href="rideBooking.html" class="btn btn-voyago-outline btn-sm">Cancel Search</a>
+    </div>
+  </nav>
 
-<h1>🚖 Finding Your Driver...</h1>
+  <div class="container py-5" style="max-width: 760px;">
+    <div class="glass-panel p-4 text-center mb-4">
+      <div id="searchHeader">
+        <span class="badge-pill badge-info mb-3 d-inline-block">
+          <i class="fa-solid fa-satellite-dish me-1"></i> Live Fleet Radar
+        </span>
+        <h2 class="fw-bold mb-2">Connecting with Nearest Driver...</h2>
+        <p class="text-secondary small mb-3" id="radarSubtitle">Scanning 1.5 km radius around your pickup position.</p>
+      </div>
 
-<div class="loader"></div>
+      <!-- Radar Leaflet Map -->
+      <div class="position-relative mb-4">
+        <div id="radarMap"></div>
+        <div class="position-absolute bottom-0 start-50 translate-middle-x mb-3 glass-panel py-2 px-3 z-3">
+          <span class="small text-success fw-bold" id="radarStatusText">
+            <i class="fa-solid fa-spinner fa-spin me-1"></i> 3 Drivers active nearby
+          </span>
+        </div>
+      </div>
 
-<p>Please wait while we search nearby drivers.</p>
+      <!-- Matched Driver Card (Revealed upon match) -->
+      <div id="driverFoundCard" class="glass-panel p-4 text-start border-success" style="display:none;">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <span class="badge-pill badge-success"><i class="fa-solid fa-circle-check"></i> Driver Confirmed</span>
+          <span class="text-success fw-bold">ETA: 3 Mins</span>
+        </div>
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <img src="../images/driver.png" class="rounded-circle border border-3 border-success shadow" width="70" height="70" style="object-fit:cover;">
+          <div>
+            <h4 class="fw-bold mb-0">Rohit Sharma</h4>
+            <div class="text-warning small"><i class="fa-solid fa-star"></i> 4.9 • Honda Activa (MP09-AB-1234)</div>
+            <div class="text-secondary small">Pickup: Your Current Location</div>
+          </div>
+        </div>
+        <div class="d-flex gap-2">
+          <a href="driverDetails.html" class="btn btn-voyago flex-grow-1">
+            <i class="fa-solid fa-user-check me-1"></i> View Driver Details & OTP
+          </a>
+          <a href="rideStarted.html" class="btn btn-voyago-outline">
+            <i class="fa-solid fa-route me-1"></i> Start Ride
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<div id="status"></div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="../js/mapService.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const defaultPos = [19.0760, 72.8777];
+      const map = L.map("radarMap", { zoomControl: false }).setView(defaultPos, 14);
 
-</div>
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
+        maxZoom: 19
+      }).addTo(map);
 
-<script>
+      // Locate user
+      let userCoords = defaultPos;
+      try {
+        const loc = await VoyaGoMap.getUserLocation();
+        userCoords = [loc.lat, loc.lng];
+        map.setView(userCoords, 14);
+      } catch (e) {}
 
-setTimeout(()=>{
+      // Add user marker
+      const userMarker = L.marker(userCoords, { icon: VoyaGoMap.createUserIcon() }).addTo(map);
+      userMarker.bindPopup("<b>📍 Your Pickup Spot</b>").openPopup();
 
-document.getElementById("status").innerHTML=
-"<h2>✅ Driver Found!</h2><br><a href='driverDetails.html'><button>View Driver</button></a>";
+      // Radar scan circle
+      const scanCircle = L.circle(userCoords, {
+        radius: 600,
+        color: "#00b894",
+        weight: 1.5,
+        fillColor: "#00b894",
+        fillOpacity: 0.12
+      }).addTo(map);
 
-},5000);
+      // Add 3 roaming drivers
+      const drivers = VoyaGoMap.spawnNearbyDrivers(map, userCoords[0], userCoords[1], 3);
 
-</script>
+      // Simulate match after 4.5 seconds
+      setTimeout(() => {
+        document.getElementById("searchHeader").style.display = "none";
+        document.getElementById("driverFoundCard").style.display = "block";
+        document.getElementById("radarStatusText").innerHTML = `<i class="fa-solid fa-check-circle text-success me-1"></i> Driver Accepted!`;
 
+        // Focus map on closest driver and user
+        if (drivers.length > 0) {
+          const closest = drivers[0];
+          closest.marker.openPopup();
+          const route = L.polyline([userCoords, [closest.lat, closest.lng]], {
+            color: "#00b894", weight: 4, dashArray: "6 6"
+          }).addTo(map);
+          map.fitBounds(route.getBounds(), { padding: [60, 60] });
+        }
+      }, 4500);
+    });
+  </script>
 </body>
+
 </html>

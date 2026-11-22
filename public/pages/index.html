@@ -12,6 +12,9 @@
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+  <!-- Leaflet CSS for Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
   <!-- Custom Design System -->
   <link rel="stylesheet" href="../css/global.css">
 </head>
@@ -97,6 +100,63 @@
                 <strong class="text-success">2 Mins Away • Rajesh (4.9 ★)</strong>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE USER MAP & RADAR SECTION -->
+  <section class="py-5 my-2">
+    <div class="container">
+      <div class="row align-items-end mb-4 g-3">
+        <div class="col-lg-8">
+          <span class="badge-pill badge-success mb-2 d-inline-block"><i class="fa-solid fa-satellite-dish me-1"></i> Live Geolocation & Radar</span>
+          <h2 class="display-6 fw-extrabold mb-1">Your Live City Map</h2>
+          <p class="text-secondary mb-0">Detecting your real-time GPS position and scanning available rides around you.</p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+          <a href="/pages/rideBooking.html" id="homepageBookBtn" class="btn-voyago">
+            <i class="fa-solid fa-taxi me-2"></i> Book Ride From My Location
+          </a>
+        </div>
+      </div>
+
+      <div class="map-hero-wrapper">
+        <!-- Floating Address Search Input -->
+        <div class="map-floating-search">
+          <div class="input-group shadow-lg">
+            <span class="input-group-text bg-dark border-0 text-success"><i class="fa-solid fa-magnifying-glass"></i></span>
+            <input type="text" id="mapSearchInput" class="form-control bg-dark text-white border-0 py-2" placeholder="Search address, landmark, or city..." autocomplete="off">
+            <button class="btn btn-voyago py-2 px-3" onclick="locateUserNow()" title="Locate Me">
+              <i class="fa-solid fa-crosshairs"></i>
+            </button>
+          </div>
+          <div id="mapSearchSuggestions" class="map-suggestions" style="display:none;"></div>
+        </div>
+
+        <!-- The Leaflet Map Canvas -->
+        <div id="homepageMap"></div>
+
+        <!-- Floating Locate Me Button -->
+        <button id="locateMeBtn" class="map-locate-btn" onclick="locateUserNow()">
+          <i class="fa-solid fa-crosshairs"></i> Locate Me
+        </button>
+
+        <!-- Stats & Location Badge -->
+        <div class="map-stats-badge d-none d-md-flex align-items-center gap-3">
+          <div class="rounded-circle bg-success bg-opacity-25 p-2 text-success fs-5">
+            <i class="fa-solid fa-location-crosshairs"></i>
+          </div>
+          <div>
+            <small class="text-secondary d-block">YOUR CURRENT LOCATION</small>
+            <strong id="userDetectedAddress" class="d-block text-truncate" style="max-width: 280px;">Detecting GPS...</strong>
+            <small id="userDetectedCoords" class="text-success font-monospace" style="font-size: 11px;">--</small>
+          </div>
+          <div class="vr mx-2 bg-secondary opacity-50"></div>
+          <div>
+            <small class="text-secondary d-block">NEARBY FLEET</small>
+            <strong id="nearbyDriversCount" class="text-info">Scanning...</strong>
           </div>
         </div>
       </div>
@@ -189,6 +249,10 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Leaflet Map JS & VoyaGo Map Engine -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="../js/mapService.js"></script>
+  <script src="../js/homepageMap.js"></script>
   <script src="../js/script.js"></script>
   <script>
     // Update navbar session buttons
